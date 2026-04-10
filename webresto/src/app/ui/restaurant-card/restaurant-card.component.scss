@@ -1,0 +1,41 @@
+/* ── Carte restaurant réutilisable ── */
+
+.resto-card {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0 !important;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+
+.resto-card:hover { border-color: var(--border-hover) !important; transform: translateY(-4px); box-shadow: var(--shadow-card); }
+
+/* Zone image */
+.resto-img {
+  height: 175px; position: relative; overflow: hidden;
+  display: flex; align-items: flex-end; padding: 0.75rem;
+}
+
+.resto-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(12,10,9,.85) 0%, rgba(12,10,9,.1) 60%); }
+
+.resto-img-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.4s; }
+
+.resto-card:hover .resto-img-bg { transform: scale(1.05); }
+
+/* Étiquette de catégorie */
+.resto-tag {
+  position: relative; z-index: 2;
+  background-color: var(--accent); color: #fff;
+  padding: 0.2rem 0.65rem; border-radius: 50px;
+  font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+}
+
+/* Corps texte */
+.resto-body { padding: 1.1rem 1.25rem 1.25rem !important; }
+.resto-name { font-weight: 600; font-size: 1.05rem; margin-bottom: 0.3rem; }
+.resto-desc { color: var(--text-muted); font-size: 0.84rem; margin-bottom: 0.6rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.resto-meta { display: flex; align-items: center; gap: 0.3rem; color: var(--text-muted); font-size: 0.8rem; }
+.resto-meta mat-icon { font-size: 14px; width: 14px; height: 14px; }

@@ -1,0 +1,71 @@
+<div class="auth-wrapper">
+  <mat-card class="auth-carte">
+    <mat-card-header>
+      <mat-card-title>Connexion</mat-card-title>
+      <mat-card-subtitle>Connectez-vous à votre compte</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="formulaire" (ngSubmit)="soumettre()">
+
+        <mat-form-field appearance="outline" class="pleine-largeur">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="votre@email.com">
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-error *ngIf="formulaire.get('email')?.hasError('required')">Email requis</mat-error>
+          <mat-error *ngIf="formulaire.get('email')?.hasError('email')">Email invalide</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="pleine-largeur">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput [type]="afficherMdp ? 'text' : 'password'"
+                 formControlName="motDePasse" placeholder="••••••">
+          <button mat-icon-button matSuffix type="button"
+                  (click)="afficherMdp = !afficherMdp">
+            <mat-icon>{{ afficherMdp ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="formulaire.get('motDePasse')?.hasError('required')">
+            Mot de passe requis
+          </mat-error>
+        </mat-form-field>
+
+        <div class="banniere-erreur" *ngIf="erreur">
+          <mat-icon>error_outline</mat-icon> {{ erreur }}
+        </div>
+
+        <!-- Lien mot de passe oublié -->
+        <div class="lien-mdp-oublie">
+          <a mat-button color="primary" routerLink="/mot-de-passe-oublie">
+            Mot de passe oublié ?
+          </a>
+        </div>
+
+
+        <div class="indice" *ngIf="roleDemo">
+          ✅ Formulaire pré-rempli — cliquez sur <strong>Se connecter</strong>
+        </div>
+
+        <button mat-flat-button color="primary" type="submit"
+                class="pleine-largeur btn-soumettre" [disabled]="chargement">
+          <mat-spinner *ngIf="chargement" diameter="20"></mat-spinner>
+          <span *ngIf="!chargement">Se connecter</span>
+        </button>
+      </form>
+
+      <mat-divider class="diviseur"></mat-divider>
+
+      <div class="section-demo">
+        <p class="demo-titre">Comptes de test</p>
+        <div class="demo-boutons">
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <p class="lien-switch">
+        Pas de compte ?
+        <a mat-button color="primary" routerLink="/inscription">Inscrivez-vous</a>
+      </p>
+    </mat-card-actions>
+  </mat-card>
+</div>

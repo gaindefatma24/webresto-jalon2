@@ -1,0 +1,192 @@
+<div class="auth-wrapper">
+  <mat-card class="auth-carte">
+
+    <!-- ═══════════════════════════════════════
+         ÉTAPE 1 — Saisie de l'email
+         ═══════════════════════════════════════ -->
+    <ng-container *ngIf="etape === 'email'">
+
+      <mat-card-header>
+        <mat-card-title>Mot de passe oublié</mat-card-title>
+        <mat-card-subtitle>
+          Entrez votre email pour recevoir un code de réinitialisation
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="formeEmail" (ngSubmit)="demanderCode()">
+
+          <mat-form-field appearance="outline" class="pleine-largeur">
+            <mat-label>Adresse email</mat-label>
+            <input matInput type="email"
+                   formControlName="email"
+                   placeholder="votre@email.com">
+            <mat-icon matSuffix>email</mat-icon>
+            <mat-error *ngIf="formeEmail.get('email')?.hasError('required')">
+              Email requis
+            </mat-error>
+            <mat-error *ngIf="formeEmail.get('email')?.hasError('email')">
+              Format d'email invalide
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Bandeau d'erreur (email inexistant) -->
+          <div class="banniere-erreur" *ngIf="erreur">
+            <mat-icon>error_outline</mat-icon> {{ erreur }}
+          </div>
+
+          <button mat-flat-button color="primary" type="submit"
+                  class="pleine-largeur btn-soumettre"
+                  [disabled]="chargement">
+            <mat-icon *ngIf="!chargement">send</mat-icon>
+            {{ chargement ? 'Envoi en cours...' : 'Envoyer le code' }}
+          </button>
+
+        </form>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <p class="lien-retour">
+          <a mat-button color="primary" routerLink="/connexion">
+            <mat-icon>arrow_back</mat-icon> Retour à la connexion
+          </a>
+        </p>
+      </mat-card-actions>
+
+    </ng-container>
+
+
+    <!-- ═══════════════════════════════════════
+         ÉTAPE 2 — Saisie du code + nouveau MDP
+         ═══════════════════════════════════════ -->
+    <ng-container *ngIf="etape === 'code'">
+
+      <mat-card-header>
+        <mat-card-title>Réinitialisation</mat-card-title>
+        <mat-card-subtitle>
+          Un code a été envoyé à <strong>{{ emailSaisi }}</strong>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+
+        <!-- Encadré de simulation (Jalon I uniquement) -->
+        <div class="encadre-simulation">
+          <mat-icon>info</mat-icon>
+          <div>
+            <strong>Veuillez utiliser le code temporaire ci-dessous</strong><br>
+            <br>
+            Votre code : <strong class="code-mis-en-avant">{{ codeSimule }}</strong>
+          </div>
+        </div>
+
+        <form [formGroup]="formeCode" (ngSubmit)="reinitialiser()">
+
+          <!-- Code de vérification -->
+          <mat-form-field appearance="outline" class="pleine-largeur">
+            <mat-label>Code de vérification (6 chiffres)</mat-label>
+            <input matInput type="text"
+                   formControlName="code"
+                   placeholder="123456"
+                   maxlength="6">
+            <mat-icon matSuffix>pin</mat-icon>
+            <mat-error *ngIf="formeCode.get('code')?.hasError('required')">Code requis</mat-error>
+            <mat-error *ngIf="formeCode.get('code')?.hasError('minlength')">6 chiffres requis</mat-error>
+            <mat-error *ngIf="formeCode.get('code')?.hasError('codeInvalide')">
+              Code incorrect — vérifiez le code affiché ci-dessus
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Nouveau mot de passe -->
+          <mat-form-field appearance="outline" class="pleine-largeur">
+            <mat-label>Nouveau mot de passe</mat-label>
+            <input matInput
+                   [type]="afficherMdp ? 'text' : 'password'"
+                   formControlName="nouveauMdp">
+            <button mat-icon-button matSuffix type="button"
+                    (click)="afficherMdp = !afficherMdp">
+              <mat-icon>{{ afficherMdp ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-hint>6 caractères minimum</mat-hint>
+            <mat-error *ngIf="formeCode.get('nouveauMdp')?.hasError('required')">Requis</mat-error>
+            <mat-error *ngIf="formeCode.get('nouveauMdp')?.hasError('minlength')">
+              6 caractères minimum
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Jauge de force du mot de passe -->
+          <div class="jauge-force" *ngIf="formeCode.get('nouveauMdp')?.value">
+            <div class="jauge-texte">
+              Force : <strong>{{ forceLabel }}</strong>
+            </div>
+            <div class="jauge-fond">
+              <div class="jauge-remplissage"
+                   [style.width.%]="forcePct"
+                   [style.background-color]="forceCouleur">
+              </div>
+            </div>
+          </div>
+
+          <!-- Confirmation du mot de passe -->
+          <mat-form-field appearance="outline" class="pleine-largeur">
+            <mat-label>Confirmer le nouveau mot de passe</mat-label>
+            <input matInput
+                   [type]="afficherConf ? 'text' : 'password'"
+                   formControlName="confirmMdp">
+            <button mat-icon-button matSuffix type="button"
+                    (click)="afficherConf = !afficherConf">
+              <mat-icon>{{ afficherConf ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="formeCode.hasError('mismatch')">
+              Les mots de passe ne correspondent pas
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Bandeau d'erreur -->
+          <div class="banniere-erreur" *ngIf="erreur">
+            <mat-icon>error_outline</mat-icon> {{ erreur }}
+          </div>
+
+          <button mat-flat-button color="primary" type="submit"
+                  class="pleine-largeur btn-soumettre"
+                  [disabled]="chargement">
+            <mat-icon *ngIf="!chargement">lock_reset</mat-icon>
+            {{ chargement ? 'Réinitialisation...' : 'Changer le mot de passe' }}
+          </button>
+
+        </form>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <p class="lien-retour">
+          <a mat-button (click)="recommencer()">
+            <mat-icon>arrow_back</mat-icon> Recommencer
+          </a>
+        </p>
+      </mat-card-actions>
+
+    </ng-container>
+
+
+    <!-- ═══════════════════════════════════════
+         SUCCÈS — Mot de passe changé
+         ═══════════════════════════════════════ -->
+    <ng-container *ngIf="etape === 'succes'">
+
+      <mat-card-content class="contenu-succes">
+        <div class="icone-succes">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <h2>Mot de passe modifié !</h2>
+        <p>Votre nouveau mot de passe est actif.<br>Vous pouvez maintenant vous connecter.</p>
+        <button mat-flat-button color="primary" class="pleine-largeur"
+                routerLink="/connexion">
+          <mat-icon>login</mat-icon>
+          Se connecter
+        </button>
+      </mat-card-content>
+
+    </ng-container>
+
+  </mat-card>
+</div>

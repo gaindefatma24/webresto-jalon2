@@ -1,0 +1,39 @@
+[
+
+  { "id": 1,  "restaurantId": 1, "nom": "Margherita",       "description": "Tomate San Marzano, mozzarella di Bufala, basilic frais",     "prix": 14.99, "imageUrl": "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop", "disponible": true },
+  { "id": 2,  "restaurantId": 1, "nom": "Pepperoni",        "description": "Pepperoni artisanal, fromage, sauce tomate maison",            "prix": 16.99, "imageUrl": "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop", "disponible": true },
+  { "id": 3,  "restaurantId": 1, "nom": "Végétarienne",     "description": "Légumes grillés, fromage de chèvre, roquette",               "prix": 15.99, "imageUrl": "https://images.unsplash.com/photo-1511689660979-10d2b1aada49?w=400&h=300&fit=crop", "disponible": true },
+  { "id": 4,  "restaurantId": 1, "nom": "Hawaïenne",        "description": "Jambon fumé, ananas caramélisé, mozzarella",                 "prix": 15.99, "imageUrl": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop", "disponible": true },
+  { "id": 5,  "restaurantId": 1, "nom": "Calzone",          "description": "Pizza pliée, ricotta, champignons, jambon",                  "prix": 17.99, "imageUrl": "https://images.unsplash.com/photo-1536964549204-cce9eab227bd?w=400&h=300&fit=crop", "disponible": true },
+
+  { "id": 6, "restaurantId": 2, "nom": "Combo Sashimi", "description": "12 pièces de sashimi frais du marché", "prix": 24.99, "imageUrl": "assets/Images/acceuil4.png", "disponible": true },
+  { "id": 7, "restaurantId": 2, "nom": "Dragon Roll", "description": "Crevette tempura, avocat, sauce anguille", "prix": 18.99, "imageUrl": "assets/Images/acceuil4.png", "disponible": true },
+  { "id": 8, "restaurantId": 2, "nom": "Bento Box", "description": "Riz, salade, tempura variée, 6 sushi assortis", "prix": 22.99, "imageUrl": "assets/Images/rizSauce.png", "disponible": true },
+  { "id": 9, "restaurantId": 2, "nom": "Ramen Tonkotsu", "description": "Bouillon de porc 12h, chashu, œuf mariné", "prix": 16.99, "imageUrl": "assets/Images/calamar.png", "disponible": true },
+  { "id": 10, "restaurantId": 2, "nom": "Edamame", "description": "Fèves de soja légèrement salées", "prix": 6.99, "imageUrl": "assets/Images/sushi-japan.png", "disponible": true },
+
+
+  { "id": 11, "restaurantId": 3, "nom": "Classic Burger", "description": "Boeuf Angus, laitue, tomate, oignon crispy", "prix": 15.99, "imageUrl": "assets/Images/acceuil5.png", "disponible": true },
+  { "id": 12, "restaurantId": 3, "nom": "Bacon Deluxe", "description": "Double viande, bacon fumé, cheddar vieilli", "prix": 19.99, "imageUrl": "assets/Images/acceuil5.png", "disponible": true },
+  { "id": 13, "restaurantId": 3, "nom": "Veggie Burger", "description": "Galette Beyond Meat, avocat, sauce maison", "prix": 14.99, "imageUrl": "assets/Images/acceuil5.png", "disponible": true },
+  { "id": 14, "restaurantId": 3, "nom": "Onion Rings", "description": "Rondelles d'oignon panées, sauce ranch", "prix": 8.99, "imageUrl": "assets/Images/acceuil5.png", "disponible": true },
+  { "id": 15, "restaurantId": 3, "nom": "Cheese Fries", "description": "Frites maison, fromage fondu, bacon croustillant", "prix": 11.99, "imageUrl": "assets/Images/acceuil5.png", "disponible": true },
+
+
+  { "id": 16, "restaurantId": 5, "nom": "Ndolé Camerounais", "description": "Épinards amers, viande, crevettes, sauce aux arachides", "prix": 14.99, "imageUrl": "assets/Images/ndolet-plantain.png", "disponible": true },
+  { "id": 17, "restaurantId": 5, "nom": "Poulet DG", "description": "Poulet rôti, bananes plantain, légumes sautés", "prix": 16.99, "imageUrl": "assets/Images/rizSauce.png", "disponible": true },
+  { "id": 18, "restaurantId": 5, "nom": "Riz Jollof", "description": "Riz parfumé à la tomate, légumes et épices", "prix": 12.99, "imageUrl": "assets/Images/images-thieb.png", "disponible": true },
+  { "id": 19, "restaurantId": 5, "nom": "Brochette de bœuf", "description": "Bœuf grillé, sauce piquante maison", "prix": 13.99, "imageUrl": "assets/Images/rizoeuf.png", "disponible": true },
+
+
+  { "id": 20, "restaurantId": 6, "nom": "Tacos al Pastor", "description": "Porc mariné, ananas, coriandre, oignon", "prix": 13.99, "imageUrl": "assets/Images/acceuil3.png", "disponible": true },
+  { "id": 21, "restaurantId": 6, "nom": "Burrito Deluxe", "description": "Riz, haricots, viande, fromage, salsa", "prix": 14.99, "imageUrl": "assets/Images/thieb-poulet.png", "disponible": true },
+  { "id": 22, "restaurantId": 6, "nom": "Quesadilla au Poulet", "description": "Poulet grillé, fromage fondant, légumes", "prix": 12.99, "imageUrl": "assets/Images/calamar.png", "disponible": true },
+  { "id": 23, "restaurantId": 6, "nom": "Guacamole & Chips", "description": "Avocat frais, citron vert, tortilla chips", "prix": 8.99, "imageUrl": "assets/Images/rizSauce.png", "disponible": true },
+
+
+  { "id": 24, "restaurantId": 7, "nom": "Falafel Wrap", "description": "Falafels croustillants, légumes frais, sauce tahini", "prix": 11.99, "imageUrl": "assets/Images/acceuil3.png", "disponible": true },
+  { "id": 25, "restaurantId": 7, "nom": "Shawarma Poulet", "description": "Poulet mariné, pita, salade, sauce à l’ail", "prix": 13.99, "imageUrl": "assets/Images/sushi-japan.png", "disponible": true },
+  { "id": 26, "restaurantId": 7, "nom": "Houmous & Pita", "description": "Purée de pois chiches, huile d’olive, pain pita", "prix": 7.99, "imageUrl": "assets/Images/rizSauce.png", "disponible": true },
+  { "id": 27, "restaurantId": 7, "nom": "Taboulé", "description": "Salade de persil, boulgour, tomate, citron", "prix": 9.99, "imageUrl": "assets/Images/rizoeuf.png", "disponible": true }
+]

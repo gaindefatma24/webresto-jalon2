@@ -1,0 +1,31 @@
+/* ── Page liste des restaurants ── */
+
+.champ-recherche { width: 100%; margin-bottom: 1rem; }
+
+.filtres-categories { margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+.chargement-centre { display: flex; justify-content: center; padding: 3rem; }
+
+.resto-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 1.25rem;
+}
+
+/* État vide */
+.etat-vide { text-align: center; padding: 3rem; }
+
+.etat-vide mat-icon {
+  font-size: 3rem;
+  width: 3rem;
+  height: 3rem;
+  color: var(--text-muted);
+  display: block;
+  margin: 0 auto 0.75rem;
+}
+
+.etat-vide p { color: var(--text-muted); margin-bottom: 1rem; }
+
+@media (max-width: 768px) {
+  .resto-grille { grid-template-columns: 1fr; }
+}

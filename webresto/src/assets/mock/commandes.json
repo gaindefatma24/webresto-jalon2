@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1001, "clientId": 1, "clientNom": "Mohamad Hassan",
+    "restaurantId": 1, "restaurantNom": "Pizza Montréal",
+    "statut": "EN_LIVRAISON", "date": "2025-02-10 18:34",
+    "adresseLivraison": "789 Avenue du Parc, Montréal",
+    "total": 47.97, "livreurNom": "Luc Bouchard", "livreurId": 3,
+    "lignes": [
+      { "platId": 1, "nomPlat": "Margherita",  "quantite": 2, "prixUnitaire": 14.99, "sousTotal": 29.98 },
+      { "platId": 5, "nomPlat": "Calzone",     "quantite": 1, "prixUnitaire": 17.99, "sousTotal": 17.99 }
+    ]
+  },
+  {
+    "id": 1002, "clientId": 1, "clientNom": "Juniroi gueye",
+    "restaurantId": 2, "restaurantNom": "Sushi Zen",
+    "statut": "LIVREE", "date": "2025-02-09 12:15",
+    "adresseLivraison": "789 Avenue du Parc, Montréal",
+    "total": 43.98,
+    "lignes": [
+      { "platId": 7, "nomPlat": "Dragon Roll",   "quantite": 1, "prixUnitaire": 18.99, "sousTotal": 18.99 },
+      { "platId": 6, "nomPlat": "Combo Sashimi", "quantite": 1, "prixUnitaire": 24.99, "sousTotal": 24.99 }
+    ]
+  },
+  {
+    "id": 1003, "clientId": 1, "clientNom": "Pierre Roy",
+    "restaurantId": 3, "restaurantNom": "Burger Royal",
+    "statut": "EN_ATTENTE", "date": "2025-02-10 19:50",
+    "adresseLivraison": "789 Avenue du Parc, Montréal",
+    "total": 35.98,
+    "lignes": [
+      { "platId": 12, "nomPlat": "Bacon Deluxe",   "quantite": 1, "prixUnitaire": 19.99, "sousTotal": 19.99 },
+      { "platId": 11, "nomPlat": "Classic Burger",  "quantite": 1, "prixUnitaire": 15.99, "sousTotal": 15.99 }
+    ]
+  },
+  {
+    "id": 1004, "clientId": 2, "clientNom": "Marie Lavoie",
+    "restaurantId": 3, "restaurantNom": "Burger Royal",
+    "statut": "EN_PREPARATION", "date": "2025-02-10 19:20",
+    "adresseLivraison": "456 Rue Sherbrooke, Montréal",
+    "total": 54.97,
+    "lignes": [
+      { "platId": 12, "nomPlat": "Bacon Deluxe",  "quantite": 2, "prixUnitaire": 19.99, "sousTotal": 39.98 },
+      { "platId": 13, "nomPlat": "Veggie Burger",  "quantite": 1, "prixUnitaire": 14.99, "sousTotal": 14.99 }
+    ]
+  },
+  {
+    "id": 1005, "clientId": 3, "clientNom": "Fadel toure",
+    "restaurantId": 2, "restaurantNom": "Sushi Zen",
+    "statut": "EN_PREPARATION", "date": "2025-02-10 18:45",
+    "adresseLivraison": "789 Avenue du Parc, Montréal",
+    "total": 35.98,
+    "lignes": [
+      { "platId": 7,  "nomPlat": "Dragon Roll",    "quantite": 1, "prixUnitaire": 18.99, "sousTotal": 18.99 },
+      { "platId": 9,  "nomPlat": "Ramen Tonkotsu", "quantite": 1, "prixUnitaire": 16.99, "sousTotal": 16.99 }
+    ]
+  }
+]

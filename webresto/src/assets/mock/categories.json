@@ -1,0 +1,9 @@
+[
+  { "id": 1, "nom": "Pizzeria", "icon": "🍕", "count": 1 },
+  { "id": 2, "nom": "Sushi",    "icon": "🍣", "count": 1 },
+  { "id": 3, "nom": "Burger",   "icon": "🍔", "count": 1 },
+  { "id": 4, "nom": "Poutine",  "icon": "🍟", "count": 1 },
+  { "id": 5, "nom": "Africain",  "icon": "🥗", "count": 1 },
+  { "id": 6, "nom": "Mexicain", "icon": "🌶️", "count": 1 },
+  { "id": 7, "nom": "Arabe",    "icon": "🧆", "count": 1 }
+]

@@ -1,0 +1,18 @@
+<div class="page">
+  <div class="container-mid">
+    <h1 class="page-titre">Mes Commandes</h1>
+
+    <div class="etat-vide" *ngIf="commandes.length === 0">
+      <mat-icon>receipt_long</mat-icon>
+      <p>Aucune commande pour le moment</p>
+    </div>
+
+    <app-commande-card
+      *ngFor="let cmd of commandes"
+      [commande]="cmd"
+      [modeClient]="true"
+      (annuler)="annuler($event)">
+    </app-commande-card>
+
+  </div>
+</div>

@@ -1,0 +1,64 @@
+<div class="page" *ngIf="restaurant">
+
+  <!-- Hero image -->
+  <div class="detail-hero">
+    <div class="detail-hero-fond"
+         [style.background-image]="'url(' + restaurant.imageUrl + ')'">
+    </div>
+    <div class="detail-hero-contenu">
+      <mat-chip-set>
+        <mat-chip class="chip-categorie">{{ restaurant.categorie }}</mat-chip>
+      </mat-chip-set>
+      <h1>{{ restaurant.nom }}</h1>
+      <p>{{ restaurant.description }}</p>
+      <div class="detail-infos">
+        <span>
+          <mat-icon>location_on</mat-icon>
+          {{ restaurant.adresse }}, {{ restaurant.ville }}
+        </span>
+        <span>
+          <mat-icon>phone</mat-icon>
+          {{ restaurant.telephone }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu -->
+  <div class="container">
+    <h2 class="section-titre" style="margin-bottom: 1.25rem">Menu</h2>
+
+    <div class="plat-grille">
+      <mat-card class="plat-carte animate-in" *ngFor="let p of plats">
+
+        <div class="plat-image" [style.background-image]="'url(' + p.imageUrl + ')'">
+          <span class="plat-prix">{{ p.prix | number:'1.2-2' }} $</span>
+        </div>
+
+        <mat-card-content class="plat-corps">
+          <div class="plat-nom">{{ p.nom }}</div>
+          <div class="plat-desc">{{ p.description }}</div>
+
+          <!-- Bouton panier si CLIENT connecté -->
+          <ng-container *ngIf="utilisateurConnecte as u; else inviteAction">
+            <button mat-stroked-button color="primary" class="btn-panier"
+                    *ngIf="u.role === Role.CLIENT"
+                    (click)="ajouterAuPanier(p)">
+              <mat-icon>add_shopping_cart</mat-icon>
+              Ajouter au panier
+            </button>
+          </ng-container>
+
+          <ng-template #inviteAction>
+            <div class="invite-prompt">
+              <a mat-button color="primary"
+                 (click)="router.navigate(['/connexion'])">Connectez-vous</a>
+              pour commander
+            </div>
+          </ng-template>
+        </mat-card-content>
+
+      </mat-card>
+    </div>
+  </div>
+</div>

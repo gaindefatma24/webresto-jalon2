@@ -1,0 +1,55 @@
+<div class="page">
+  <div class="container">
+
+    <div class="page-entete">
+      <div>
+        <h1 class="page-titre">Restaurants</h1>
+        <p class="page-sous-titre">{{ filtres.length }} restaurant(s) trouvé(s)</p>
+      </div>
+    </div>
+
+    <!-- Barre de recherche -->
+    <mat-form-field appearance="outline" class="champ-recherche">
+      <mat-label>Rechercher un restaurant…</mat-label>
+      <input matInput [(ngModel)]="recherche" (ngModelChange)="filtrer()" placeholder="Pizza, Sushi…">
+      <mat-icon matPrefix>search</mat-icon>
+      <button mat-icon-button matSuffix *ngIf="recherche" (click)="recherche=''; filtrer()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <!-- Filtres par catégorie -->
+    <mat-chip-listbox class="filtres-categories"
+                      [(ngModel)]="categorieFiltree"
+                      (change)="filtrer()">
+      <mat-chip-option [value]="null" [selected]="categorieFiltree === null">Tous</mat-chip-option>
+      <mat-chip-option *ngFor="let c of categories" [value]="c.id">
+        {{ c.icon }} {{ c.nom }}
+      </mat-chip-option>
+    </mat-chip-listbox>
+
+    <!-- Spinner de chargement -->
+    <div class="chargement-centre" *ngIf="chargement">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+
+    <!-- Grille des restaurants -->
+    <div class="resto-grille" *ngIf="!chargement">
+
+      <!-- État vide -->
+      <div class="etat-vide" *ngIf="filtres.length === 0" style="grid-column: 1 / -1">
+        <mat-icon>search_off</mat-icon>
+        <p>Aucun restaurant trouvé</p>
+        <button mat-stroked-button (click)="reinitialiser()">Réinitialiser</button>
+      </div>
+
+      <!-- Carte restaurant réutilisable -->
+      <app-restaurant-card
+        *ngFor="let r of filtres"
+        [restaurant]="r"
+        class="animate-in">
+      </app-restaurant-card>
+    </div>
+
+  </div>
+</div>

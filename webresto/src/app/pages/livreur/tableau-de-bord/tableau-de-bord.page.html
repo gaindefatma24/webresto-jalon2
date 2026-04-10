@@ -1,0 +1,82 @@
+<div class="page">
+  <div class="container-mid">
+    <h1 class="page-titre">🚗 Dashboard Livreur</h1>
+    <p class="page-sous-titre">Bienvenue {{ auth.currentUser?.prenom }} {{ auth.currentUser?.nom }}</p>
+
+    <!-- Statistiques -->
+    <div class="stats-rangee">
+      <mat-card class="stat-carte">
+        <mat-card-content>
+          <div class="stat-chiffre">{{ disponibles.length }}</div>
+          <div class="stat-label">Disponibles</div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="stat-carte">
+        <mat-card-content>
+          <div class="stat-chiffre">{{ enCours.length }}</div>
+          <div class="stat-label">En cours</div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="stat-carte">
+        <mat-card-content>
+          <div class="stat-chiffre">{{ livrees.length }}</div>
+          <div class="stat-label">Livrées</div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Commandes disponibles -->
+    <h2 class="section-titre">📦 Commandes disponibles</h2>
+
+    <div class="etat-vide" *ngIf="disponibles.length === 0">
+      <mat-icon>check_circle</mat-icon>
+      <p>Aucune commande disponible</p>
+    </div>
+
+    <mat-card class="cmd-carte" *ngFor="let cmd of disponibles">
+      <mat-card-header>
+        <mat-card-title>{{ cmd.restaurantNom }}</mat-card-title>
+        <mat-card-subtitle>{{ cmd.date }}</mat-card-subtitle>
+        <span class="total-badge">{{ cmd.total | number:'1.2-2' }} $</span>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="ligne-commande" *ngFor="let l of cmd.lignes">
+          <span>{{ l.quantite }}× {{ l.nomPlat }}</span>
+        </div>
+        <mat-divider style="margin: .5rem 0"></mat-divider>
+        <p class="adresse-livraison">
+          <mat-icon>location_on</mat-icon>
+          {{ cmd.adresseLivraison }}
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-flat-button color="primary"
+                (click)="prendreEnCharge(cmd)"
+                [disabled]="cmd._chargement">
+          <mat-spinner *ngIf="cmd._chargement" diameter="18"></mat-spinner>
+          <mat-icon *ngIf="!cmd._chargement">delivery_dining</mat-icon>
+          {{ cmd._chargement ? 'Traitement...' : 'Prendre en charge' }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Mes livraisons -->
+    <h2 class="section-titre" style="margin-top: 2rem">🚗 Mes livraisons</h2>
+
+    <div class="etat-vide" *ngIf="mesLivraisons.length === 0">
+      <mat-icon>local_shipping</mat-icon>
+      <p>Aucune livraison en cours</p>
+    </div>
+
+    <!-- Réutilisation du composant commande-card partagé -->
+    <app-commande-card
+      *ngFor="let cmd of mesLivraisons"
+      [commande]="cmd"
+      [afficherClient]="true"
+      [modeLivreur]="true"
+      [chargement]="cmd._chargement ?? false"
+      (confirmerLivraison)="confirmerLivraison($any($event))">
+    </app-commande-card>
+
+  </div>
+</div>

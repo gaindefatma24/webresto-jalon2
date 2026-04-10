@@ -1,0 +1,31 @@
+/* ── Tableau de bord Livreur ── */
+
+.page-titre      { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 0.25rem; }
+.page-sous-titre { color: var(--text-muted); margin-bottom: 2rem; }
+
+/* Cartes statistiques */
+.stats-rangee { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
+.stat-carte   { background-color: var(--bg-card) !important; border: 1px solid var(--border) !important; text-align: center; }
+.stat-chiffre { font-size: 2rem; font-weight: 700; color: var(--accent); font-family: var(--font-display); }
+.stat-label   { color: var(--text-muted); font-size: 0.85rem; }
+
+/* Titre de section */
+.section-titre { font-family: var(--font-display); font-size: 1.15rem; color: var(--accent); margin-bottom: 1rem; }
+
+/* État vide */
+.etat-vide { text-align: center; padding: 2rem; }
+.etat-vide mat-icon { font-size: 2.5rem; width: 2.5rem; height: 2.5rem; color: var(--text-muted); display: block; margin: 0 auto 0.5rem; }
+.etat-vide p { color: var(--text-muted); }
+
+/* Carte commande disponible */
+.cmd-carte      { background-color: var(--bg-card) !important; border: 1px solid var(--border) !important; margin-bottom: 0.85rem; }
+mat-card-title  { font-size: 1rem !important; color: var(--text-primary) !important; }
+mat-card-subtitle { color: var(--text-muted) !important; font-size: 0.78rem !important; }
+mat-card-header { position: relative; }
+
+.total-badge { position: absolute; right: 1rem; top: 1rem; color: var(--accent); font-weight: 700; font-size: 1rem; }
+
+.ligne-commande { display: flex; justify-content: space-between; padding: 0.2rem 0; font-size: 0.85rem; color: var(--text-secondary); }
+
+.adresse-livraison { display: flex; align-items: center; gap: 0.25rem; color: var(--text-muted); font-size: 0.82rem; }
+.adresse-livraison mat-icon { font-size: 14px; width: 14px; height: 14px; }

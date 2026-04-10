@@ -1,0 +1,109 @@
+/* ── Page connexion ── */
+
+/* Centre la carte sur la page */
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 62px);
+  padding: 2rem;
+}
+
+/* Carte du formulaire */
+.auth-carte {
+  width: 100%;
+  max-width: 440px;
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+}
+
+mat-card-title {
+  font-family: var(--font-display) !important;
+  font-size: 1.7rem !important;
+  color: var(--text-primary) !important;
+}
+
+mat-card-subtitle {
+  color: var(--text-muted) !important;
+  margin-bottom: 1.5rem !important;
+}
+
+mat-card-header  { padding: 1.5rem 1.5rem 0 !important; }
+mat-card-content { padding: 1rem 1.5rem !important; }
+mat-card-actions { padding: 0.5rem 1.5rem 1.5rem !important; }
+
+/* Champ pleine largeur */
+.pleine-largeur { width: 100%; margin-bottom: 0.5rem; }
+
+/* Bouton connexion */
+.btn-soumettre {
+  height: 48px;
+  font-size: 1rem !important;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Bandeau d'erreur */
+.banniere-erreur {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--danger-bg);
+  color: var(--danger);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.75rem;
+  font-size: 0.88rem;
+}
+
+/* Indice formulaire pré-rempli */
+.indice {
+  background-color: var(--success-bg);
+  color: var(--success);
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  margin-bottom: 0.75rem;
+}
+
+.diviseur { margin: 1.25rem 0 !important; }
+
+/* Section comptes de démo */
+.section-demo { text-align: center; }
+
+.demo-titre {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  margin-bottom: 0.65rem;
+}
+
+.demo-boutons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.demo-boutons button {
+  color: var(--text-secondary) !important;
+  border-color: var(--border) !important;
+  font-size: 0.82rem !important;
+}
+
+/* Lien vers l'inscription */
+.lien-switch {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  text-align: center;
+  width: 100%;
+}
+
+/* Lien mot de passe oublié */
+.lien-mdp-oublie {
+  text-align: right;
+  margin-bottom: 0.5rem;
+  margin-top: -0.25rem;
+}

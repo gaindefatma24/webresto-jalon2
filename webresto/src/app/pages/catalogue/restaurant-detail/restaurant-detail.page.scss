@@ -1,0 +1,63 @@
+/* ── Page détail restaurant (menu) ── */
+
+/* Hero image */
+.detail-hero { height: 280px; position: relative; overflow: hidden; }
+.detail-hero-fond { position: absolute; inset: 0; background-size: cover; background-position: center; }
+.detail-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, var(--bg-deep) 0%, rgba(12,10,9,.3) 50%); }
+
+.detail-hero-contenu {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 2rem; z-index: 2;
+  max-width: 1240px; margin: 0 auto;
+}
+
+.chip-categorie { background-color: var(--accent) !important; color: #fff !important; margin-bottom: 0.6rem; }
+
+.detail-hero-contenu h1 {
+  font-family: var(--font-display);
+  font-size: 2.4rem; font-weight: 700;
+  letter-spacing: -0.02em; margin-bottom: 0.5rem;
+}
+
+.detail-hero-contenu p { color: var(--text-secondary); font-size: 1rem; margin-bottom: 0.5rem; }
+
+.detail-infos {
+  display: flex; gap: 1.5rem;
+  color: var(--text-muted); font-size: 0.88rem;
+  flex-wrap: wrap; align-items: center;
+}
+
+.detail-infos span { display: flex; align-items: center; gap: 0.25rem; }
+.detail-infos mat-icon { font-size: 16px; width: 16px; height: 16px; }
+
+/* Grille des plats */
+.plat-grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 1.15rem; }
+
+.plat-carte {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  overflow: hidden; padding: 0 !important;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.plat-carte:hover { border-color: var(--border-hover) !important; transform: translateY(-2px); }
+
+.plat-image { height: 145px; position: relative; background-size: cover; background-position: center; }
+
+.plat-prix {
+  position: absolute; bottom: 0.6rem; right: 0.6rem;
+  background-color: rgba(12,10,9,.8); backdrop-filter: blur(8px);
+  color: var(--accent); padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-sm); font-weight: 700; font-size: 0.95rem;
+}
+
+.plat-corps { padding: 1rem 1.15rem 1.15rem !important; }
+.plat-nom   { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.25rem; }
+.plat-desc  { color: var(--text-muted); font-size: 0.82rem; margin-bottom: 0.85rem; line-height: 1.4; }
+.btn-panier { width: 100%; }
+.invite-prompt { color: var(--text-muted); font-size: 0.84rem; display: flex; align-items: center; }
+
+@media (max-width: 768px) { .plat-grille { grid-template-columns: 1fr 1fr; } .detail-hero-contenu h1 { font-size: 1.8rem; } }
+@media (max-width: 480px) { .plat-grille { grid-template-columns: 1fr; } }

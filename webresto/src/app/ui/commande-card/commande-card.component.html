@@ -1,0 +1,81 @@
+<mat-card class="cmd-card">
+  <mat-card-header>
+    <mat-card-title>
+      Commande #{{ commande.id }} — {{ commande.restaurantNom }}
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{ commande.date }}
+      <span *ngIf="afficherClient" class="client-nom">
+        &nbsp;· 👤 {{ commande.clientNom }}
+      </span>
+    </mat-card-subtitle>
+
+    <!-- Badge statut via composant partagé -->
+    <div class="statut-slot">
+      <app-statut-badge [statut]="commande.statut" />
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-divider></mat-divider>
+
+    <div class="cmd-lignes">
+      <div class="cmd-ligne" *ngFor="let l of commande.lignes">
+        <span>{{ l.quantite }}× {{ l.nomPlat }}</span>
+        <span>{{ l.sousTotal | number:'1.2-2' }} $</span>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="cmd-footer">
+      <span class="cmd-adresse">
+        <mat-icon>location_on</mat-icon>
+        {{ commande.adresseLivraison }}
+      </span>
+      <span class="cmd-total">{{ commande.total | number:'1.2-2' }} $</span>
+    </div>
+
+    <div class="livreur-info" *ngIf="commande.livreurNom">
+      <mat-icon>delivery_dining</mat-icon>
+      Livreur : {{ commande.livreurNom }}
+    </div>
+  </mat-card-content>
+
+  <!-- Actions restaurateur -->
+  <mat-card-actions *ngIf="modeRestaurateur && commande.statut === StatutCommande.EN_ATTENTE">
+    <button mat-flat-button color="primary"
+            [disabled]="chargement"
+            (click)="accepter.emit(commande)">
+      <mat-spinner *ngIf="chargement" diameter="18"></mat-spinner>
+      <mat-icon *ngIf="!chargement">check_circle</mat-icon>
+      Accepter
+    </button>
+    <button mat-stroked-button color="warn"
+            [disabled]="chargement"
+            (click)="refuser.emit(commande)">
+      <mat-icon>cancel</mat-icon>
+      Refuser
+    </button>
+  </mat-card-actions>
+
+  <!-- Action client -->
+  <mat-card-actions *ngIf="modeClient && commande.statut === StatutCommande.EN_ATTENTE">
+    <button mat-stroked-button color="warn"
+            (click)="annuler.emit(commande)">
+      <mat-icon>cancel</mat-icon>
+      Annuler
+    </button>
+  </mat-card-actions>
+
+  <!-- Action livreur -->
+  <mat-card-actions *ngIf="modeLivreur && commande.statut === StatutCommande.EN_LIVRAISON">
+    <button mat-flat-button color="accent"
+            [disabled]="chargement"
+            (click)="confirmerLivraison.emit(commande)">
+      <mat-spinner *ngIf="chargement" diameter="18"></mat-spinner>
+      <mat-icon *ngIf="!chargement">check_circle</mat-icon>
+      {{ chargement ? 'Confirmation...' : 'Confirmer la livraison' }}
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,81 @@
+<mat-toolbar class="app-toolbar" color="primary">
+
+  <!-- Logo -->
+  <a class="nav-brand" routerLink="/">
+    <span>🍽️</span> WebResto
+  </a>
+
+  <span class="spacer"></span>
+
+  <!-- Liens de navigation -->
+  <div class="nav-liens">
+    <a mat-button routerLink="/"
+       routerLinkActive="lien-actif"
+       [routerLinkActiveOptions]="{ exact: true }">Accueil</a>
+    <a mat-button routerLink="/restaurants"
+       routerLinkActive="lien-actif">Restaurants</a>
+
+    <!-- CLIENT uniquement -->
+    <ng-container *ngIf="auth.currentUser?.role === Role.CLIENT">
+      <a mat-button routerLink="/panier" routerLinkActive="lien-actif">
+        <span *ngIf="(cart.count$ | async)! > 0"
+              [matBadge]="cart.count$ | async"
+              matBadgeColor="accent"
+              matBadgeSize="small">
+          🛒 Panier
+        </span>
+        <span *ngIf="(cart.count$ | async) === 0">🛒 Panier</span>
+      </a>
+      <a mat-button routerLink="/commandes" routerLinkActive="lien-actif">Commandes</a>
+    </ng-container>
+
+    <!-- RESTAURATEUR -->
+    <a mat-button *ngIf="auth.currentUser?.role === Role.RESTAURATEUR"
+       routerLink="/dashboard/restaurateur" routerLinkActive="lien-actif">
+      Dashboard
+    </a>
+
+    <!-- LIVREUR -->
+    <a mat-button *ngIf="auth.currentUser?.role === Role.LIVREUR"
+       routerLink="/dashboard/livreur" routerLinkActive="lien-actif">
+      Livraisons
+    </a>
+  </div>
+
+  <!-- Zone authentification -->
+  <div class="nav-auth">
+
+    <!-- Non connecté -->
+    <ng-container *ngIf="!auth.currentUser">
+      <a mat-stroked-button routerLink="/connexion" class="btn-connexion">Connexion</a>
+      <a mat-flat-button routerLink="/inscription" color="accent">Inscription</a>
+    </ng-container>
+
+    <!-- Connecté : menu utilisateur -->
+    <ng-container *ngIf="auth.currentUser">
+      <button mat-button [matMenuTriggerFor]="menuUtilisateur" class="btn-utilisateur">
+        <span class="avatar">{{ auth.currentUser.prenom[0] }}</span>
+        {{ auth.currentUser.prenom }}
+        <span class="role-chip">{{ roleLabel }}</span>
+      </button>
+
+      <mat-menu #menuUtilisateur="matMenu" xPosition="before">
+        <div class="menu-info">
+          <strong>{{ auth.currentUser.prenom }} {{ auth.currentUser.nom }}</strong>
+          <small>{{ auth.currentUser.email }}</small>
+        </div>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="router.navigate(['/profil'])">
+          <mat-icon>manage_accounts</mat-icon>
+          Mon profil
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="deconnecter()">
+          <mat-icon>logout</mat-icon>
+          Déconnexion
+        </button>
+      </mat-menu>
+    </ng-container>
+  </div>
+
+</mat-toolbar>

@@ -1,0 +1,88 @@
+<div class="page">
+  <div class="container-mid">
+    <h1 class="page-titre">🛒 Mon Panier</h1>
+
+    <!-- Panier vide -->
+    <div class="etat-vide" *ngIf="(cart.items$ | async)?.length === 0">
+      <mat-icon>shopping_cart</mat-icon>
+      <p>Votre panier est vide</p>
+      <button mat-flat-button color="primary"
+              (click)="router.navigate(['/restaurants'])">
+        Parcourir les restaurants
+      </button>
+    </div>
+
+    <!-- Panier avec articles -->
+    <ng-container *ngIf="(cart.items$ | async)?.length! > 0">
+
+      <div class="panier-entete">
+        <h2>{{ cart.restaurantNom$ | async }}</h2>
+        <button mat-stroked-button color="warn" (click)="vider()">
+          <mat-icon>delete_sweep</mat-icon> Vider
+        </button>
+      </div>
+
+      <mat-card class="articles-carte">
+        <mat-list>
+          <mat-list-item *ngFor="let item of (cart.items$ | async); let last = last"
+                         class="article-item">
+            <div class="article-rangee">
+              <div class="article-info">
+                <span class="article-nom">{{ item.plat.nom }}</span>
+                <span class="article-unite">{{ item.plat.prix | number:'1.2-2' }} $ / unité</span>
+              </div>
+              <div class="article-qte">
+                <button mat-icon-button (click)="diminuer(item)" class="btn-qte">
+                  <mat-icon>remove</mat-icon>
+                </button>
+                <span class="qte-valeur">{{ item.quantite }}</span>
+                <button mat-icon-button (click)="augmenter(item)" class="btn-qte">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+              <span class="article-total">
+                {{ (item.plat.prix * item.quantite) | number:'1.2-2' }} $
+              </span>
+              <button mat-icon-button (click)="retirer(item)" class="btn-retirer">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+            <mat-divider *ngIf="!last"></mat-divider>
+          </mat-list-item>
+        </mat-list>
+      </mat-card>
+
+      <!-- Total -->
+      <mat-card class="resume-carte">
+        <mat-card-content>
+          <div class="resume-rangee">
+            <span class="resume-label">Total</span>
+            <span class="resume-total">
+              {{ cart.total$ | async | number:'1.2-2' }} $
+            </span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Adresse de livraison -->
+      <mat-form-field appearance="outline" class="pleine-largeur">
+        <mat-label>Adresse de livraison</mat-label>
+        <input matInput [(ngModel)]="adresseLivraison"
+               placeholder="Entrez votre adresse complète">
+        <mat-icon matSuffix>location_on</mat-icon>
+      </mat-form-field>
+
+      <!-- Bouton commander -->
+      <button mat-flat-button color="primary" class="btn-commander"
+              (click)="commander()"
+              [disabled]="!adresseLivraison.trim()">
+        Commander — {{ cart.total$ | async | number:'1.2-2' }} $
+      </button>
+
+      <p class="note-paiement">
+        <mat-icon>info</mat-icon>
+        Le paiement se fera à la livraison
+      </p>
+    </ng-container>
+  </div>
+</div>

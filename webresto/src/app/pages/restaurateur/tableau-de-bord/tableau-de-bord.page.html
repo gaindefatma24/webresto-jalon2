@@ -1,0 +1,296 @@
+<div class="page">
+  <div class="container">
+
+    <!-- EN-TÊTE -->
+    <div class="page-entete">
+      <div>
+        <h1 class="page-titre">🍽️ Dashboard Restaurateur</h1>
+        <p class="page-sous-titre">Bienvenue {{ auth.currentUser?.prenom }} — Gérez vos restaurants et commandes</p>
+      </div>
+      <button mat-flat-button color="primary"
+              *ngIf="ongletActif === 'restaurants' && !afficherFormeResto && !restoSelectionne"
+              (click)="ouvrirFormeResto()">
+        <mat-icon>add</mat-icon> Nouveau restaurant
+      </button>
+    </div>
+
+    <!-- ONGLETS -->
+    <div class="barre-onglets">
+      <button class="btn-onglet" [class.actif]="ongletActif === 'restaurants'"
+              (click)="ongletActif = 'restaurants'; restoSelectionne = null; afficherFormeResto = false">
+        🏪 Mes Restaurants ({{ restaurants.length }})
+      </button>
+      <button class="btn-onglet" [class.actif]="ongletActif === 'commandes'"
+              (click)="ongletActif = 'commandes'; chargerCommandes()">
+        📋 Commandes
+        <span class="badge-onglet" *ngIf="commandesEnAttente > 0">{{ commandesEnAttente }}</span>
+      </button>
+    </div>
+
+    <!-- ══ ONGLET RESTAURANTS ══════════════════════════════════ -->
+    <div *ngIf="ongletActif === 'restaurants'">
+
+      <!-- Formulaire restaurant -->
+      <mat-card class="forme-carte" *ngIf="afficherFormeResto">
+        <mat-card-header>
+          <mat-card-title>{{ restoEnEdition ? 'Modifier le restaurant' : 'Nouveau restaurant' }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="formeResto" (ngSubmit)="enregistrerResto()">
+
+            <div class="form-rangee">
+              <mat-form-field appearance="outline" style="flex:1.5">
+                <mat-label>Nom du restaurant</mat-label>
+                <input matInput formControlName="nom" placeholder="Ex: Pizza Montréal">
+                <mat-error *ngIf="champInvalide(formeResto,'nom')">Champ requis</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" style="flex:1">
+                <mat-label>Catégorie</mat-label>
+                <mat-select formControlName="categorieId" (selectionChange)="onChangementCategorie()">
+                  <mat-option *ngFor="let c of categories" [value]="c.id">{{ c.icon }} {{ c.nom }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="champInvalide(formeResto,'categorieId')">Champ requis</mat-error>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="pleine-largeur">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" rows="3"
+                        placeholder="Décrivez votre restaurant..."></textarea>
+              <mat-error *ngIf="champInvalide(formeResto,'description')">Champ requis</mat-error>
+            </mat-form-field>
+
+            <p class="etiquette-section">📍 Adresse</p>
+
+            <div class="form-rangee">
+              <mat-form-field appearance="outline" style="flex:1.5">
+                <mat-label>Numéro et rue</mat-label>
+                <input matInput formControlName="rue" placeholder="100 Rue Sainte-Catherine O">
+                <mat-icon matSuffix>signpost</mat-icon>
+                <mat-error *ngIf="champInvalide(formeResto,'rue')">Champ requis</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" style="flex:1">
+                <mat-label>Ville</mat-label>
+                <input matInput formControlName="ville" placeholder="Montréal">
+                <mat-error *ngIf="champInvalide(formeResto,'ville')">Champ requis</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-rangee">
+              <mat-form-field appearance="outline">
+                <mat-label>Code postal</mat-label>
+                <input matInput formControlName="codePostal" placeholder="A1A 1A1"
+                       maxlength="7" (input)="formaterCodePostal($event)">
+                <mat-error *ngIf="champInvalide(formeResto,'codePostal')">Format invalide (ex: H3A 1B5)</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Province</mat-label>
+                <mat-select formControlName="province">
+                  <mat-option *ngFor="let p of provinces" [value]="p.code">{{ p.nom }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Pays</mat-label>
+                <input matInput formControlName="pays" readonly>
+                <mat-icon matSuffix>flag</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" style="max-width:280px">
+              <mat-label>Téléphone</mat-label>
+              <input matInput type="tel" formControlName="telephone" placeholder="514-555-0000">
+              <mat-icon matSuffix>phone</mat-icon>
+            </mat-form-field>
+
+            <p class="etiquette-section">📷 Photo du restaurant</p>
+            <div class="zone-upload"
+                 (click)="restoImageInput.click()"
+                 (dragover)="$event.preventDefault()"
+                 (drop)="onDropResto($event)">
+              <div class="apercu-image" *ngIf="apercuImageResto">
+                <img [src]="apercuImageResto" alt="Aperçu">
+                <button mat-icon-button type="button" class="btn-effacer-image"
+                        (click)="$event.stopPropagation(); effacerImageResto()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+              <div class="placeholder-image" *ngIf="!apercuImageResto">
+                <mat-icon class="icone-upload">cloud_upload</mat-icon>
+                <p>Cliquez ou glissez une image ici</p>
+                <small>JPG, PNG, WEBP — max 2 MB</small>
+              </div>
+            </div>
+            <input #restoImageInput type="file" accept="image/*" hidden
+                   (change)="onImageRestoSelectionnee($event)">
+
+            <div class="form-actions">
+              <button mat-flat-button color="primary" type="submit" [disabled]="enregistrementResto">
+                <mat-spinner *ngIf="enregistrementResto" diameter="18"></mat-spinner>
+                {{ enregistrementResto ? '' : (restoEnEdition ? 'Modifier' : 'Créer') }}
+              </button>
+              <button mat-stroked-button type="button"
+                      (click)="afficherFormeResto = false; restoEnEdition = null; effacerImageResto()">
+                Annuler
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Gestion des plats -->
+      <div *ngIf="restoSelectionne && !afficherFormeResto">
+        <div class="nav-retour">
+          <button mat-button (click)="restoSelectionne = null; platsDuResto = []">
+            <mat-icon>arrow_back</mat-icon> Retour
+          </button>
+          <h2 class="section-titre">🍕 Plats de : {{ restoSelectionne.nom }}</h2>
+          <button mat-flat-button color="primary" (click)="ouvrirFormePlat(null)">
+            <mat-icon>add</mat-icon> Nouveau plat
+          </button>
+        </div>
+
+        <!-- Formulaire plat -->
+        <mat-card class="forme-carte" *ngIf="afficherFormePlat">
+          <mat-card-header>
+            <mat-card-title>{{ platEnEdition ? 'Modifier le plat' : 'Nouveau plat' }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <form [formGroup]="formePlat" (ngSubmit)="enregistrerPlat()">
+              <div class="form-rangee">
+                <mat-form-field appearance="outline" style="flex:1.5">
+                  <mat-label>Nom du plat</mat-label>
+                  <input matInput formControlName="nom" placeholder="Margherita">
+                  <mat-error *ngIf="champInvalide(formePlat,'nom')">Champ requis</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" style="flex:0.6">
+                  <mat-label>Prix ($)</mat-label>
+                  <input matInput type="number" formControlName="prix" placeholder="14.99" step="0.01" min="0">
+                  <mat-icon matSuffix>attach_money</mat-icon>
+                  <mat-error *ngIf="champInvalide(formePlat,'prix')">Prix invalide</mat-error>
+                </mat-form-field>
+              </div>
+
+              <mat-form-field appearance="outline" class="pleine-largeur">
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description" rows="3"
+                          placeholder="Ingrédients, préparation..."></textarea>
+                <mat-error *ngIf="champInvalide(formePlat,'description')">Champ requis</mat-error>
+              </mat-form-field>
+
+              <p class="etiquette-section">📷 Photo du plat</p>
+              <div class="zone-upload"
+                   (click)="platImageInput.click()"
+                   (dragover)="$event.preventDefault()"
+                   (drop)="onDropPlat($event)">
+                <div class="apercu-image" *ngIf="apercuImagePlat">
+                  <img [src]="apercuImagePlat" alt="Aperçu">
+                  <button mat-icon-button type="button" class="btn-effacer-image"
+                          (click)="$event.stopPropagation(); effacerImagePlat()">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+                <div class="placeholder-image" *ngIf="!apercuImagePlat">
+                  <mat-icon class="icone-upload">cloud_upload</mat-icon>
+                  <p>Cliquez ou glissez une image ici</p>
+                  <small>JPG, PNG, WEBP — max 2 MB</small>
+                </div>
+              </div>
+              <input #platImageInput type="file" accept="image/*" hidden
+                     (change)="onImagePlatSelectionnee($event)">
+
+              <mat-checkbox formControlName="disponible" color="primary" class="checkbox-dispo">
+                Disponible à la commande
+              </mat-checkbox>
+
+              <div class="form-actions">
+                <button mat-flat-button color="primary" type="submit" [disabled]="enregistrementPlat">
+                  <mat-spinner *ngIf="enregistrementPlat" diameter="18"></mat-spinner>
+                  {{ enregistrementPlat ? '' : (platEnEdition ? 'Modifier' : 'Ajouter') }}
+                </button>
+                <button mat-stroked-button type="button"
+                        (click)="afficherFormePlat = false; platEnEdition = null; effacerImagePlat()">
+                  Annuler
+                </button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Liste des plats -->
+        <div *ngIf="!afficherFormePlat">
+          <div class="etat-vide" *ngIf="platsDuResto.length === 0">
+            <span class="icone-vide">🍽️</span>
+            <p>Aucun plat pour ce restaurant</p>
+          </div>
+          <div class="plat-carte-gestion" *ngFor="let p of platsDuResto">
+            <div class="plat-image" [style.background-image]="'url(' + p.imageUrl + ')'">
+              <span class="badge-dispo" [class.disponible]="p.disponible" [class.indisponible]="!p.disponible">
+                {{ p.disponible ? '✅' : '🔴' }}
+              </span>
+            </div>
+            <div class="plat-corps">
+              <div class="plat-nom">{{ p.nom }}</div>
+              <div class="plat-desc">{{ p.description }}</div>
+              <div class="plat-prix">{{ p.prix | number:'1.2-2' }} $</div>
+            </div>
+            <div class="plat-actions">
+              <button mat-icon-button (click)="ouvrirFormePlat(p)" matTooltip="Modifier">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="supprimerPlat(p)" matTooltip="Supprimer">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Liste des restaurants -->
+      <div *ngIf="!restoSelectionne && !afficherFormeResto">
+        <div class="etat-vide" *ngIf="restaurants.length === 0">
+          <span class="icone-vide">🏪</span>
+          <p>Vous n'avez pas encore de restaurant</p>
+        </div>
+        <div class="resto-carte-gestion" *ngFor="let r of restaurants">
+          <div class="resto-miniature" [style.background-image]="'url(' + r.imageUrl + ')'"></div>
+          <div class="resto-info">
+            <h3>{{ r.nom }}</h3>
+            <p>📍 {{ r.adresse }}, {{ r.ville }}</p>
+            <p class="resto-categorie">{{ r.categorie }}</p>
+            <span class="badge-actif">Actif</span>
+          </div>
+          <div class="resto-actions">
+            <button mat-stroked-button (click)="ouvrirFormeResto(r)">
+              <mat-icon>edit</mat-icon> Modifier
+            </button>
+            <button mat-stroked-button color="primary" (click)="selectionnerResto(r)">
+              <mat-icon>restaurant_menu</mat-icon> Gérer les plats
+            </button>
+            <button mat-stroked-button color="warn" (click)="supprimerResto(r)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ONGLET COMMANDES ══════════════════════════════════════ -->
+    <div *ngIf="ongletActif === 'commandes'">
+      <div class="etat-vide" *ngIf="commandes.length === 0">
+        <span class="icone-vide">📋</span>
+        <p>Aucune commande reçue</p>
+      </div>
+
+      <!-- Réutilisation du composant commande-card partagé -->
+      <app-commande-card
+        *ngFor="let cmd of commandes"
+        [commande]="cmd"
+        [afficherClient]="true"
+        [modeRestaurateur]="true"
+        (accepter)="accepterCommande($event)"
+        (refuser)="refuserCommande($event)">
+      </app-commande-card>
+    </div>
+
+  </div>
+</div>

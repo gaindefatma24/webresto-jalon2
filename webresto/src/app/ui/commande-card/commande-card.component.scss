@@ -1,0 +1,34 @@
+/* ── Carte commande réutilisable ── */
+
+.cmd-card { background-color: var(--bg-card) !important; border: 1px solid var(--border) !important; margin-bottom: 0.85rem; }
+
+mat-card-header   { position: relative; padding-bottom: 0.5rem !important; }
+mat-card-title    { font-size: 1rem !important; color: var(--text-primary) !important; }
+mat-card-subtitle { color: var(--text-muted) !important; font-size: 0.78rem !important; }
+
+.client-nom { color: var(--text-secondary); }
+
+/* Badge statut positionné en haut à droite */
+.statut-slot { position: absolute; top: 1rem; right: 1rem; }
+
+/* Lignes de commande */
+.cmd-lignes { padding: 0.75rem 0; }
+
+.cmd-ligne { display: flex; justify-content: space-between; padding: 0.2rem 0; font-size: 0.85rem; color: var(--text-secondary); }
+
+/* Pied : adresse + total */
+.cmd-footer  { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; flex-wrap: wrap; gap: 0.5rem; }
+.cmd-adresse { display: flex; align-items: center; gap: 0.25rem; color: var(--text-muted); font-size: 0.82rem; }
+.cmd-adresse mat-icon { font-size: 14px; width: 14px; height: 14px; }
+.cmd-total   { font-weight: 700; color: var(--accent); font-size: 1.05rem; }
+
+/* Info livreur */
+.livreur-info { display: flex; align-items: center; gap: 0.25rem; color: var(--text-muted); font-size: 0.82rem; padding-top: 0.5rem; }
+.livreur-info mat-icon { font-size: 14px; width: 14px; height: 14px; }
+
+/* Statuts des badges */
+.statut-attente     { background-color: var(--warning-bg) !important; color: var(--warning) !important; }
+.statut-preparation { background-color: var(--info-bg) !important; color: var(--info) !important; }
+.statut-livraison   { background-color: var(--purple-bg) !important; color: var(--purple) !important; }
+.statut-livree      { background-color: var(--success-bg) !important; color: var(--success) !important; }
+.statut-annulee     { background-color: var(--danger-bg) !important; color: var(--danger) !important; }

@@ -1,0 +1,16 @@
+<mat-card class="resto-card animate-in" (click)="naviguer()">
+  <div class="resto-img">
+    <div class="resto-img-bg"
+         [style.background-image]="'url(' + restaurant.imageUrl + ')'">
+    </div>
+    <span class="resto-tag">{{ restaurant.categorie }}</span>
+  </div>
+  <mat-card-content class="resto-body">
+    <div class="resto-name">{{ restaurant.nom }}</div>
+    <div class="resto-desc">{{ restaurant.description }}</div>
+    <div class="resto-meta">
+      <mat-icon>location_on</mat-icon>
+      {{ restaurant.adresse }}{{ restaurant.ville ? ', ' + restaurant.ville : '' }}
+    </div>
+  </mat-card-content>
+</mat-card>

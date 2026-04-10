@@ -1,0 +1,104 @@
+/* ── Tableau de bord Restaurateur ── */
+
+.page-titre      { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 0.25rem; }
+.page-sous-titre { color: var(--text-muted); }
+.page-entete     { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+
+/* ── Onglets ── */
+.barre-onglets {
+  display: flex; gap: 0.5rem; margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;
+}
+
+.btn-onglet {
+  padding: 0.5rem 1.15rem;
+  border: 1px solid var(--border); border-radius: 8px;
+  background-color: transparent; color: var(--text-secondary);
+  cursor: pointer; font-size: 0.88rem; font-family: inherit;
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+  position: relative;
+}
+
+.btn-onglet:hover { border-color: var(--accent); color: var(--accent); }
+.btn-onglet.actif { background-color: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+
+.badge-onglet {
+  position: absolute; top: -6px; right: -6px;
+  background-color: var(--danger); color: #fff;
+  border-radius: 50%; width: 18px; height: 18px;
+  font-size: 0.7rem; display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Formulaires ── */
+.forme-carte  { background-color: var(--bg-card) !important; border: 1px solid var(--border) !important; margin-bottom: 1.5rem; }
+.pleine-largeur { width: 100%; }
+.form-rangee  { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.25rem; }
+.etiquette-section { font-size: 0.82rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 1rem 0 0.5rem; }
+.form-actions { display: flex; gap: 0.75rem; margin-top: 1.25rem; flex-wrap: wrap; }
+.checkbox-dispo { display: block; margin: 1rem 0; }
+
+/* ── Zone upload image ── */
+.zone-upload {
+  border: 2px dashed var(--border); border-radius: var(--radius);
+  min-height: 140px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: border-color 0.2s; margin-bottom: 0.75rem;
+}
+
+.zone-upload:hover { border-color: var(--accent); }
+
+.apercu-image { position: relative; width: 100%; max-width: 320px; }
+.apercu-image img { width: 100%; border-radius: var(--radius-sm); display: block; }
+
+.btn-effacer-image {
+  position: absolute; top: 0.25rem; right: 0.25rem;
+  background-color: rgba(0,0,0,.5) !important; color: #fff !important;
+}
+
+.placeholder-image { text-align: center; padding: 1.5rem; color: var(--text-muted); }
+.placeholder-image p { margin: 0.5rem 0 0.25rem; }
+.placeholder-image small { font-size: 0.78rem; }
+.icone-upload { font-size: 2.5rem !important; width: 2.5rem !important; height: 2.5rem !important; color: var(--text-muted); }
+
+/* ── Navigation retour ── */
+.nav-retour    { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.section-titre { font-family: var(--font-display); font-size: 1.2rem; flex: 1; margin: 0; }
+
+/* ── Liste des restaurants ── */
+.resto-carte-gestion {
+  display: flex; align-items: center; gap: 1rem;
+  background-color: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1rem; margin-bottom: 0.65rem; flex-wrap: wrap;
+}
+
+.resto-miniature { width: 72px; height: 72px; border-radius: var(--radius-sm); background-size: cover; background-position: center; flex-shrink: 0; }
+.resto-info { flex: 1; min-width: 180px; }
+.resto-info h3 { font-size: 1rem; margin-bottom: 0.25rem; }
+.resto-info p  { color: var(--text-muted); font-size: 0.82rem; margin: 0; }
+.resto-categorie { font-size: 0.78rem; color: var(--text-muted); }
+
+.badge-actif {
+  display: inline-block; background-color: var(--success-bg); color: var(--success);
+  padding: 0.15rem 0.55rem; border-radius: 50px; font-size: 0.72rem; font-weight: 600; margin-top: 0.35rem;
+}
+
+.resto-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+
+/* ── Liste des plats ── */
+.plat-carte-gestion {
+  display: flex; align-items: center; gap: 1rem;
+  background-color: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 0.85rem; margin-bottom: 0.65rem;
+}
+
+.plat-image   { width: 64px; height: 64px; border-radius: var(--radius-sm); background-size: cover; background-position: center; position: relative; flex-shrink: 0; }
+.badge-dispo  { position: absolute; bottom: 2px; right: 2px; font-size: 0.8rem; }
+.plat-corps   { flex: 1; }
+.plat-nom     { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.2rem; }
+.plat-desc    { color: var(--text-muted); font-size: 0.82rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 340px; }
+.plat-prix    { color: var(--accent); font-weight: 700; font-size: 0.95rem; margin-top: 0.25rem; }
+.plat-actions { display: flex; gap: 0.25rem; }
+
+/* ── État vide ── */
+.etat-vide  { text-align: center; padding: 3rem; }
+.icone-vide { font-size: 3rem; display: block; margin-bottom: 0.75rem; opacity: 0.6; }
+.etat-vide p { color: var(--text-muted); }

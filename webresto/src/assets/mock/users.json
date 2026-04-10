@@ -1,0 +1,5 @@
+[
+  { "id": 1, "nom": "Roy", "prenom": "Pierre", "email": "client@test.com", "password": "123456", "role": "CLIENT", "adresse": "789 Avenue du Parc, Montréal", "telephone": "514-555-0001" },
+  { "id": 2, "nom": "Tremblay", "prenom": "Jean", "email": "resto@test.com", "password": "123456", "role": "RESTAURATEUR", "adresse": "100 Rue Sainte-Catherine O, Montréal", "telephone": "514-555-0002" },
+  { "id": 3, "nom": "Bouchard", "prenom": "Luc", "email": "livreur@test.com", "password": "123456", "role": "LIVREUR", "adresse": "50 Rue Beaubien, Montréal", "telephone": "514-555-0003" }
+]

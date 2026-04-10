@@ -1,0 +1,88 @@
+<div class="page">
+
+  <!-- ── SLIDER HERO ─────────────────────────────────────────── -->
+  <div class="hero">
+
+    <div class="hero-slides">
+      <div class="hero-slide"
+           *ngFor="let s of slides; let i = index"
+           [class.active]="slideActuel === i"
+           [style.background-image]="'url(' + s.image + ')'">
+      </div>
+    </div>
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-contenu">
+      <div class="hero-badge">
+        <span class="badge-point"></span>
+        {{ slides[slideActuel].continent }}
+      </div>
+      <h1>{{ slides[slideActuel].titre }}<br><em>{{ slides[slideActuel].sousTitre }}</em></h1>
+      <p>{{ slides[slideActuel].description }}</p>
+      <button mat-flat-button color="primary" class="hero-cta"
+              (click)="router.navigate(['/restaurants'])">
+        Explorer les restaurants
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+
+    <button mat-icon-button class="fleche gauche" (click)="precedent()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <button mat-icon-button class="fleche droite" (click)="suivant()">
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
+
+    <div class="hero-points">
+      <button class="point"
+              *ngFor="let s of slides; let i = index"
+              [class.active]="slideActuel === i"
+              (click)="aller(i)">
+      </button>
+    </div>
+
+    <div class="hero-barre">
+      <div class="hero-barre-fill" [style.width.%]="progression"></div>
+    </div>
+  </div>
+
+  <!-- ── CONTENU ─────────────────────────────────────────────── -->
+  <div class="container">
+
+    <!-- Catégories -->
+    <div class="section">
+      <div class="section-entete">
+        <h2 class="section-titre">Catégories</h2>
+      </div>
+      <div class="cat-grille">
+        <mat-card class="cat-carte animate-in"
+                  *ngFor="let c of categories"
+                  (click)="allerCategorie(c.id)">
+          <mat-card-content>
+            <span class="cat-icone">{{ c.icon }}</span>
+            <div class="cat-nom">{{ c.nom }}</div>
+            <div class="cat-compte">{{ c.count }} restaurant{{ c.count > 1 ? 's' : '' }}</div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Restaurants populaires -->
+    <div class="section">
+      <div class="section-entete">
+        <h2 class="section-titre">Restaurants populaires</h2>
+        <button mat-button color="primary" (click)="router.navigate(['/restaurants'])">
+          Voir tout <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+      <div class="resto-grille">
+        <app-restaurant-card
+          *ngFor="let r of restaurants"
+          [restaurant]="r">
+        </app-restaurant-card>
+      </div>
+    </div>
+
+  </div>
+</div>

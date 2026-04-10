@@ -1,0 +1,119 @@
+/* ── Barre de navigation ── */
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: rgba(12, 10, 9, 0.92) !important;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(46, 42, 39, 0.5);
+  padding: 0 1.5rem;
+  height: 62px;
+}
+
+/* Logo */
+.nav-brand {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: 1.5rem;
+}
+
+/* Espace flexible entre logo et auth */
+.spacer {
+  flex: 1 1 auto;
+}
+
+/* Liens de navigation */
+.nav-liens {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.nav-liens a {
+  color: var(--text-secondary) !important;
+  font-size: 0.88rem !important;
+}
+
+.nav-liens a:hover {
+  color: var(--text-primary) !important;
+}
+
+/* Lien de la page courante */
+.lien-actif {
+  color: var(--accent) !important;
+  background-color: var(--accent-soft) !important;
+  border-radius: 8px;
+}
+
+/* Zone connexion/déconnexion */
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-left: 1rem;
+}
+
+.btn-connexion {
+  color: var(--text-secondary) !important;
+  border-color: var(--border) !important;
+}
+
+.btn-utilisateur {
+  color: var(--text-secondary) !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Cercle avec initiale de l'utilisateur */
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* Pastille affichant le rôle */
+.role-chip {
+  font-size: 0.72rem;
+  background-color: var(--accent-soft);
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: 50px;
+  margin-left: 0.25rem;
+}
+
+/* Contenu du menu déroulant utilisateur */
+.menu-info {
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.menu-info strong {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.menu-info small {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Masquer les liens sur mobile */
+@media (max-width: 768px) {
+  .nav-liens { display: none; }
+}
