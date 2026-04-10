@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Angular cache
+.angular/
+
+# IDE
+../../.idea/
+
+# Build output
+dist/
+
+# Env files
+.env
+*.env

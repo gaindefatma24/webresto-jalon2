@@ -1,0 +1,29 @@
+/* =============================================
+   Couleurs des badges de statut de commande
+   Chaque classe correspond à un statut métier
+   ============================================= */
+
+.statut-attente {
+  background-color: var(--warning-bg) !important;
+  color: var(--warning) !important;
+}
+
+.statut-preparation {
+  background-color: var(--info-bg) !important;
+  color: var(--info) !important;
+}
+
+.statut-livraison {
+  background-color: var(--purple-bg) !important;
+  color: var(--purple) !important;
+}
+
+.statut-livree {
+  background-color: var(--success-bg) !important;
+  color: var(--success) !important;
+}
+
+.statut-annulee {
+  background-color: var(--danger-bg) !important;
+  color: var(--danger) !important;
+}
