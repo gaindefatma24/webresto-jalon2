@@ -1,174 +1,92 @@
 /**
  * ================================================================
- * RestaurantService — Gestion des restaurants et plats (Jalon I)
+ * RestaurantService — Jalon II (remplace la version mock du Jalon I)
  * ================================================================
- *
- * Ce service gère toutes les opérations CRUD sur :
- *   - Les restaurants (lister, créer, modifier, supprimer)
- *   - Les plats (lister, créer, modifier, supprimer)
- *   - Les catégories (lecture seule)
- *
+ * Tous les appels HTTP vont vers business_service (port 8082).
+ * Le JWT est ajouté automatiquement par jwtInterceptor.
+ * Les signatures de méthodes sont IDENTIQUES au Jalon I pour
+ * ne pas casser les composants Angular existants.
  * ================================================================
  */
-
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Restaurant, Plat, Categorie } from '../models';
-import { StorageService, STORAGE_KEYS } from './storage.service';
+import {environment} from "../../../environments/environment";
+
 
 @Injectable({ providedIn: 'root' })
 export class RestaurantService {
 
-  constructor(private storage: StorageService) {}
+  private readonly BASE = environment.apiUrl; // http://localhost:8082/api
 
-  // ──────────────────────────────────────────────────────────────
-  // CATÉGORIES
-  // ──────────────────────────────────────────────────────────────
+  constructor(private http: HttpClient) {}
 
-  /** Retourne toutes les catégories (Pizzeria, Sushi, Burger...) */
+  // ── CATÉGORIES ────────────────────────────────────────────────────────────
+
   getCategories(): Observable<Categorie[]> {
-    return of(this.storage.getAll<Categorie>(STORAGE_KEYS.CATEGORIES)).pipe(delay(100));
+    return this.http.get<Categorie[]>(`${this.BASE}/categories`);
   }
 
-  // ──────────────────────────────────────────────────────────────
-  // RESTAURANTS — LECTURE
-  // ──────────────────────────────────────────────────────────────
+  // ── RESTAURANTS — LECTURE ─────────────────────────────────────────────────
 
-  /** Retourne tous les restaurants */
   getAll(): Observable<Restaurant[]> {
-    return of(this.storage.getAll<Restaurant>(STORAGE_KEYS.RESTAURANTS)).pipe(delay(200));
+    return this.http.get<Restaurant[]>(`${this.BASE}/restaurants`);
   }
 
-  /**
-   * Retourne un restaurant par son ID.
-   * Utilisé par la page de détail (/restaurants/:id)
-   */
-  getById(id: number): Observable<Restaurant | undefined> {
-    return of(this.storage.getById<Restaurant>(STORAGE_KEYS.RESTAURANTS, id)).pipe(delay(100));
+  getById(id: number): Observable<Restaurant> {
+    return this.http.get<Restaurant>(`${this.BASE}/restaurants/${id}`);
   }
 
-  /**
-   * Retourne les restaurants d'un restaurateur spécifique.
-   * Utilisé dans le dashboard restaurateur.
-   * @param proprietaireId - ID de l'utilisateur restaurateur
-   */
   getByProprietaire(proprietaireId: number): Observable<Restaurant[]> {
-    const all = this.storage.getAll<Restaurant>(STORAGE_KEYS.RESTAURANTS);
-    return of(all.filter(r => r.proprietaireId === proprietaireId)).pipe(delay(200));
+    // Route dédiée : GET /api/restaurants/mes-restaurants (JWT requis)
+    return this.http.get<Restaurant[]>(`${this.BASE}/restaurants/mes-restaurants`);
   }
 
-  /**
-   * Recherche et filtre les restaurants.
-   * Utilisé dans la page liste avec barre de recherche et filtres.
-   * @param query   - Texte de recherche (nom ou description)
-   * @param catId   - Filtre par catégorie (null = toutes)
-   */
   search(query: string, catId?: number | null): Observable<Restaurant[]> {
-    const all = this.storage.getAll<Restaurant>(STORAGE_KEYS.RESTAURANTS);
-    const filtered = all.filter(r => {
-      const q = query.toLowerCase();
-      const matchSearch = !q
-        || r.nom.toLowerCase().includes(q)
-        || r.description.toLowerCase().includes(q);
-      const matchCat = !catId || r.categorieId === catId;
-      return matchSearch && matchCat;
-    });
-    return of(filtered).pipe(delay(150));
+    let params = new HttpParams();
+    if (query) params = params.set('nom', query);
+    if (catId) params = params.set('categorieId', catId.toString());
+    return this.http.get<Restaurant[]>(`${this.BASE}/restaurants/search`, { params });
   }
 
-  // ──────────────────────────────────────────────────────────────
-  // RESTAURANTS — ÉCRITURE (CRUD)
-  // ──────────────────────────────────────────────────────────────
+  // ── RESTAURANTS — ÉCRITURE ────────────────────────────────────────────────
 
-  /**
-   * Crée un nouveau restaurant et le conserve en mémoire.
-   * @param data - Données du formulaire (sans ID, sans proprietaireId)
-   * @param proprietaireId - ID du restaurateur connecté
-   */
-  createRestaurant(
-    data: Omit<Restaurant, 'id' | 'proprietaireId'>,
-    proprietaireId: number
-  ): Observable<Restaurant> {
-    const newResto = this.storage.create<Restaurant>(
-      STORAGE_KEYS.RESTAURANTS,
-      { ...data, proprietaireId }
-    );
-    return of(newResto).pipe(delay(400));
+  createRestaurant(data: Omit<Restaurant, 'id' | 'proprietaireId'>, proprietaireId: number): Observable<Restaurant> {
+    // proprietaireId est extrait du JWT côté serveur, inutile de l'envoyer
+    return this.http.post<Restaurant>(`${this.BASE}/restaurants`, data);
   }
 
-  /**
-   * Modifie un restaurant existant.
-   * @param id      - ID du restaurant à modifier
-   * @param changes - Champs à mettre à jour
-   */
-  updateRestaurant(id: number, changes: Partial<Restaurant>): Observable<Restaurant | null> {
-    const updated = this.storage.update<Restaurant>(STORAGE_KEYS.RESTAURANTS, id, changes);
-    return of(updated).pipe(delay(400));
+  updateRestaurant(id: number, changes: Partial<Restaurant>): Observable<Restaurant> {
+    return this.http.put<Restaurant>(`${this.BASE}/restaurants/${id}`, changes);
   }
 
-  /**
-   * Supprime un restaurant ET tous ses plats associés.
-   * @param id - ID du restaurant à supprimer
-   */
-  deleteRestaurant(id: number): Observable<boolean> {
-    // Supprime aussi tous les plats du restaurant
-    const plats = this.storage.getAll<Plat>(STORAGE_KEYS.PLATS);
-    const platsRestants = plats.filter(p => p.restaurantId !== id);
-    this.storage.saveAll(STORAGE_KEYS.PLATS, platsRestants);
-
-    const ok = this.storage.delete<Restaurant>(STORAGE_KEYS.RESTAURANTS, id);
-    return of(ok).pipe(delay(400));
+  deleteRestaurant(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.BASE}/restaurants/${id}`);
   }
 
-  // ──────────────────────────────────────────────────────────────
-  // PLATS — LECTURE
-  // ──────────────────────────────────────────────────────────────
+  // ── PLATS — LECTURE ───────────────────────────────────────────────────────
 
-  /**
-   * Retourne tous les plats d'un restaurant spécifique.
-   * Utilisé dans la page détail du restaurant.
-   * @param restaurantId - ID du restaurant
-   */
   getPlats(restaurantId: number): Observable<Plat[]> {
-    const all = this.storage.getAll<Plat>(STORAGE_KEYS.PLATS);
-    return of(all.filter(p => p.restaurantId === restaurantId)).pipe(delay(150));
+    return this.http.get<Plat[]>(`${this.BASE}/restaurants/${restaurantId}/plats`);
   }
 
-  /** Retourne un plat par son ID */
-  getPlatById(id: number): Observable<Plat | undefined> {
-    return of(this.storage.getById<Plat>(STORAGE_KEYS.PLATS, id)).pipe(delay(100));
+  getPlatById(id: number): Observable<Plat> {
+    return this.http.get<Plat>(`${this.BASE}/plats/${id}`);
   }
 
-  // ──────────────────────────────────────────────────────────────
-  // PLATS — ÉCRITURE (CRUD)
-  // ──────────────────────────────────────────────────────────────
+  // ── PLATS — ÉCRITURE ──────────────────────────────────────────────────────
 
-  /**
-   * Crée un nouveau plat pour un restaurant.
-   * @param data - Données du plat (sans ID)
-   */
   createPlat(data: Omit<Plat, 'id'>): Observable<Plat> {
-    const newPlat = this.storage.create<Plat>(STORAGE_KEYS.PLATS, data);
-    return of(newPlat).pipe(delay(400));
+    const { restaurantId, ...body } = data;
+    return this.http.post<Plat>(`${this.BASE}/restaurants/${restaurantId}/plats`, body);
   }
 
-  /**
-   * Modifie un plat existant.
-   * @param id      - ID du plat
-   * @param changes - Champs à mettre à jour
-   */
-  updatePlat(id: number, changes: Partial<Plat>): Observable<Plat | null> {
-    const updated = this.storage.update<Plat>(STORAGE_KEYS.PLATS, id, changes);
-    return of(updated).pipe(delay(400));
+  updatePlat(id: number, changes: Partial<Plat>): Observable<Plat> {
+    return this.http.put<Plat>(`${this.BASE}/plats/${id}`, changes);
   }
 
-  /**
-   * Supprime un plat.
-   * @param id - ID du plat à supprimer
-   */
-  deletePlat(id: number): Observable<boolean> {
-    const ok = this.storage.delete<Plat>(STORAGE_KEYS.PLATS, id);
-    return of(ok).pipe(delay(300));
+  deletePlat(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.BASE}/plats/${id}`);
   }
 }

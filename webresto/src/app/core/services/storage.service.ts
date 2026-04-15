@@ -10,7 +10,7 @@
  *   3. Toutes les opérations CRUD modifient ces tableaux en RAM
  *   4. AUCUNE écriture dans localStorage ou sessionStorage
  *   5. Un rechargement de page repart du JSON original
- *      → comportement identique à ce que fera Jalon II avec
+ *      -> comportement identique à ce que fera Jalon II avec
  *        les vrais appels HTTP vers Spring Boot
  *
  * Au Jalon II : on remplace init() + les méthodes par des appels
@@ -38,7 +38,7 @@ export const STORAGE_KEYS = {
 @Injectable({ providedIn: 'root' })
 export class StorageService {
 
-  /** Stockage en mémoire : clé → tableau d'objets */
+  /** Stockage en mémoire : clé -> tableau d'objets */
   private store = new Map<string, any[]>();
 
   /** Compteur auto-incrémenté pour les nouveaux IDs */

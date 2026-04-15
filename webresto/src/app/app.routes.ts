@@ -13,6 +13,7 @@ export const routes: Routes = [
   { path: 'inscription', loadComponent: () => import('./pages/auth/inscription/inscription.page').then(m => m.InscriptionPage), title: 'Inscription — WebResto' },
   { path: 'register', redirectTo: 'inscription' },
   { path: 'mot-de-passe-oublie', loadComponent: () => import('./pages/auth/mot-de-passe-oublie/mot-de-passe-oublie.page').then(m => m.MotDePasseOubliePage), title: 'Mot de passe oublié — WebResto' },
+  { path: 'reset-password', loadComponent: () => import('./pages/auth/reset-password/reset-password.page').then(m => m.ResetPasswordPage), title: 'Réinitialiser le mot de passe — WebResto' },
 
   // ── TOUS RÔLES ────────────────────────────────────────────────
   { path: 'profil',  canActivate: [authGuard], loadComponent: () => import('./pages/client/profil/profil.page').then(m => m.ProfilPage), title: 'Mon Profil — WebResto' },

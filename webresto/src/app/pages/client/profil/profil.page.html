@@ -1,172 +1,75 @@
-<div class="page">
-  <div class="container-mid">
+<div class="profil-wrapper">
 
-    <!-- En-tête -->
-    <div class="profil-entete">
-      <div class="avatar">{{ initiales }}</div>
-      <div>
-        <h1 class="page-titre">{{ utilisateur?.prenom }} {{ utilisateur?.nom }}</h1>
-        <p class="page-sous-titre">{{ utilisateur?.email }}</p>
-        <mat-chip-set>
-          <mat-chip class="chip-role">{{ roleLabel }}</mat-chip>
-        </mat-chip-set>
-      </div>
-    </div>
-
-    <!-- Onglets -->
-    <mat-tab-group animationDuration="200ms" color="accent">
-
-      <!-- Onglet 1 : Informations -->
-      <mat-tab label="👤 Informations">
-        <div class="onglet-contenu">
-          <form [formGroup]="infoForm" (ngSubmit)="sauvegarderInfos()">
-
-            <div class="form-rangee">
-              <mat-form-field appearance="outline">
-                <mat-label>Prénom</mat-label>
-                <input matInput formControlName="prenom">
-                <mat-error *ngIf="infoForm.get('prenom')?.hasError('required')">Requis</mat-error>
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>Nom</mat-label>
-                <input matInput formControlName="nom">
-                <mat-error *ngIf="infoForm.get('nom')?.hasError('required')">Requis</mat-error>
-              </mat-form-field>
+    <!-- Carte profil -->
+    <mat-card class="profil-card">
+        <mat-card-header>
+            <div class="avatar">{{ initiales }}</div>
+            <div class="header-info">
+                <mat-card-title>{{ utilisateur?.prenom }} {{ utilisateur?.nom }}</mat-card-title>
+                <mat-card-subtitle>{{ utilisateur?.email }}</mat-card-subtitle>
+                <span class="role-badge">{{ roleLabel }}</span>
             </div>
+        </mat-card-header>
+    </mat-card>
 
-            <mat-form-field appearance="outline" class="pleine-largeur">
-              <mat-label>Email</mat-label>
-              <input matInput type="email" formControlName="email">
-              <mat-icon matSuffix>email</mat-icon>
-              <mat-error *ngIf="infoForm.get('email')?.hasError('required')">Requis</mat-error>
-              <mat-error *ngIf="infoForm.get('email')?.hasError('email')">Email invalide</mat-error>
-            </mat-form-field>
+    <!-- Formulaire infos -->
+    <mat-card class="form-card">
+        <mat-card-header>
+            <mat-card-title>Mes informations</mat-card-title>
+        </mat-card-header>
 
-            <mat-form-field appearance="outline" class="pleine-largeur">
-              <mat-label>Téléphone</mat-label>
-              <input matInput type="tel" formControlName="telephone" placeholder="514-555-0000">
-              <mat-icon matSuffix>phone</mat-icon>
-            </mat-form-field>
+        <mat-card-content>
+            <form [formGroup]="infoForm" (ngSubmit)="sauvegarderInfos()">
 
-            <mat-divider class="diviseur"></mat-divider>
-            <p class="section-etiquette">📍 Adresse de livraison</p>
+                <div class="row-2">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Prénom</mat-label>
+                        <input matInput formControlName="prenom">
+                        <mat-error *ngIf="infoForm.get('prenom')?.hasError('required')">Requis</mat-error>
+                    </mat-form-field>
 
-            <mat-form-field appearance="outline" class="pleine-largeur">
-              <mat-label>Numéro et rue</mat-label>
-              <input matInput formControlName="rue" placeholder="100 Rue Sainte-Catherine O">
-              <mat-icon matSuffix>signpost</mat-icon>
-            </mat-form-field>
-
-            <div class="form-rangee">
-              <mat-form-field appearance="outline">
-                <mat-label>Ville</mat-label>
-                <input matInput formControlName="ville" placeholder="Montréal">
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>Code postal</mat-label>
-                <input matInput formControlName="codePostal" placeholder="H3A 1B5"
-                       maxlength="7" (input)="formaterCodePostal($event)">
-                <mat-error *ngIf="infoForm.get('codePostal')?.hasError('postalCode')">
-                  Format invalide (ex: H3A 1B5)
-                </mat-error>
-              </mat-form-field>
-            </div>
-
-            <div class="form-rangee">
-              <mat-form-field appearance="outline">
-                <mat-label>Province</mat-label>
-                <input matInput formControlName="province" placeholder="QC">
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>Pays</mat-label>
-                <input matInput formControlName="pays" readonly>
-              </mat-form-field>
-            </div>
-
-            <div class="form-actions">
-              <button mat-flat-button color="primary" type="submit"
-                      [disabled]="infoForm.pristine || infoForm.invalid">
-                <mat-icon>save</mat-icon> Sauvegarder
-              </button>
-              <button mat-stroked-button type="button" (click)="annulerInfos()">
-                Annuler
-              </button>
-            </div>
-          </form>
-        </div>
-      </mat-tab>
-
-      <!-- Onglet 2 : Sécurité -->
-      <mat-tab label="🔒 Sécurité">
-        <div class="onglet-contenu">
-          <form [formGroup]="mdpForm" (ngSubmit)="sauvegarderMdp()">
-
-            <mat-form-field appearance="outline" class="pleine-largeur">
-              <mat-label>Mot de passe actuel</mat-label>
-              <input matInput [type]="afficherActuel ? 'text' : 'password'"
-                     formControlName="motDePasseActuel">
-              <button mat-icon-button matSuffix type="button"
-                      (click)="afficherActuel = !afficherActuel">
-                <mat-icon>{{ afficherActuel ? 'visibility_off' : 'visibility' }}</mat-icon>
-              </button>
-              <mat-error *ngIf="mdpForm.get('motDePasseActuel')?.hasError('required')">Requis</mat-error>
-              <mat-error *ngIf="mdpForm.get('motDePasseActuel')?.hasError('wrongPassword')">
-                Mot de passe incorrect
-              </mat-error>
-            </mat-form-field>
-
-            <mat-divider class="diviseur"></mat-divider>
-
-            <mat-form-field appearance="outline" class="pleine-largeur">
-              <mat-label>Nouveau mot de passe</mat-label>
-              <input matInput [type]="afficherNouv ? 'text' : 'password'"
-                     formControlName="newPassword">
-              <button mat-icon-button matSuffix type="button"
-                      (click)="afficherNouv = !afficherNouv">
-                <mat-icon>{{ afficherNouv ? 'visibility_off' : 'visibility' }}</mat-icon>
-              </button>
-              <mat-hint>6 caractères minimum</mat-hint>
-              <mat-error *ngIf="mdpForm.get('newPassword')?.hasError('required')">Requis</mat-error>
-              <mat-error *ngIf="mdpForm.get('newPassword')?.hasError('minlength')">6 caractères minimum</mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="pleine-largeur">
-              <mat-label>Confirmer le nouveau mot de passe</mat-label>
-              <input matInput [type]="afficherConfirm ? 'text' : 'password'"
-                     formControlName="confirmPassword">
-              <button mat-icon-button matSuffix type="button"
-                      (click)="afficherConfirm = !afficherConfirm">
-                <mat-icon>{{ afficherConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
-              </button>
-              <mat-error *ngIf="mdpForm.hasError('mismatch')">
-                Les mots de passe ne correspondent pas
-              </mat-error>
-            </mat-form-field>
-
-            <!-- Jauge de force -->
-            <div class="jauge-force" *ngIf="mdpForm.get('newPassword')?.value">
-              <div class="jauge-label">Force : <strong>{{ forceLabel }}</strong></div>
-              <div class="jauge-piste">
-                <div class="jauge-remplissage"
-                     [style.width.%]="forcePct"
-                     [style.background]="forceCouleur">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nom</mat-label>
+                        <input matInput formControlName="nom">
+                        <mat-error *ngIf="infoForm.get('nom')?.hasError('required')">Requis</mat-error>
+                    </mat-form-field>
                 </div>
-              </div>
-            </div>
 
-            <div class="form-actions">
-              <button mat-flat-button color="primary" type="submit"
-                      [disabled]="mdpForm.invalid">
-                <mat-icon>lock_reset</mat-icon> Changer le mot de passe
-              </button>
-              <button mat-stroked-button type="button" (click)="mdpForm.reset()">
-                Annuler
-              </button>
-            </div>
-          </form>
-        </div>
-      </mat-tab>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Courriel</mat-label>
+                    <input matInput formControlName="email">
+                    <mat-icon matSuffix>lock</mat-icon>
+                    <mat-hint>L'email ne peut pas être modifié</mat-hint>
+                </mat-form-field>
 
-    </mat-tab-group>
-  </div>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Téléphone</mat-label>
+                    <input matInput formControlName="telephone" placeholder="514-555-0000">
+                    <mat-icon matSuffix>phone</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Adresse</mat-label>
+                    <input matInput formControlName="adresse" placeholder="123 Rue Exemple, Montréal">
+                    <mat-icon matSuffix>home</mat-icon>
+                </mat-form-field>
+
+                <div *ngIf="erreur" class="error-msg">{{ erreur }}</div>
+
+                <div class="actions">
+                    <button mat-raised-button color="primary" type="submit"
+                            [disabled]="infoForm.pristine || infoForm.invalid || chargement">
+                        <mat-icon>save</mat-icon>
+                        {{ chargement ? 'Sauvegarde…' : 'Sauvegarder' }}
+                    </button>
+                    <button mat-stroked-button type="button" (click)="annulerInfos()"
+                            [disabled]="infoForm.pristine">
+                        Annuler
+                    </button>
+                </div>
+
+            </form>
+        </mat-card-content>
+    </mat-card>
+
 </div>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="004-create-commandes" author="webresto">
+
+        <!-- Table principale des commandes -->
+        <createTable tableName="commandes">
+            <column name="id"                 type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
+            <!-- IDs cross-service : stockés comme Long, pas de FK (bases séparées) -->
+            <column name="client_id"          type="BIGINT"><constraints nullable="false"/></column>
+            <column name="client_nom"         type="VARCHAR(200)"/>
+            <column name="restaurant_id"      type="BIGINT"><constraints nullable="false" foreignKeyName="fk_cmd_resto" references="restaurants(id)"/></column>
+            <column name="restaurant_nom"     type="VARCHAR(200)"/>
+            <!-- Statuts: EN_ATTENTE, EN_PREPARATION, EN_LIVRAISON, LIVREE, ANNULEE -->
+            <column name="statut"             type="VARCHAR(50)" defaultValue="EN_ATTENTE"><constraints nullable="false"/></column>
+            <column name="adresse_livraison"  type="VARCHAR(500)"/>
+            <column name="total"              type="DECIMAL(10,2)"/>
+            <column name="livreur_id"         type="BIGINT"/>
+            <column name="livreur_nom"        type="VARCHAR(200)"/>
+            <column name="created_at"         type="DATETIME" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+        <!-- Lignes de commande : un enregistrement par plat commandé -->
+        <createTable tableName="lignes_commande">
+            <column name="id"            type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="commande_id"   type="BIGINT"><constraints nullable="false" foreignKeyName="fk_ligne_cmd" references="commandes(id)"/></column>
+            <column name="plat_id"       type="BIGINT"/>
+            <column name="nom_plat"      type="VARCHAR(200)"/>
+            <column name="quantite"      type="INT" defaultValueNumeric="1"/>
+            <!-- Prix unitaire au MOMENT de la commande — ne change pas si le prix du plat change -->
+            <column name="prix_unitaire" type="DECIMAL(10,2)"/>
+            <column name="sous_total"    type="DECIMAL(10,2)"/>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>

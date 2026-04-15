@@ -1,151 +1,113 @@
 /**
  * ================================================================
- * AuthService — Authentification (Jalon I)
+ * AuthService — Jalon II (remplace la version mock du Jalon I)
  * ================================================================
- *
- * La session est gardée uniquement en mémoire (BehaviorSubject).
- * Aucune écriture dans localStorage ou sessionStorage.
- * Un rechargement de page déconnecte l'utilisateur — comportement
- * attendu, identique à ce que fera le JWT au Jalon II.
- *
- * Au Jalon II → les méthodes feront des appels HTTP vers le
- * microservice d'authentification Spring Boot.
+ * Tous les appels HTTP vont vers auth-service (port 8081).
+ * Le JWT est stocké dans localStorage pour persister au refresh.
  * ================================================================
  */
-
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { delay, tap } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { tap, catchError, map } from 'rxjs/operators';
 import { User, Role } from '../models';
-import { StorageService, STORAGE_KEYS } from './storage.service';
+import {environment} from "../../../environments/environment";
+import {JWT_KEY} from "../interceptors/jwt.interceptors";
+
+interface AuthResponse {
+  token: string; id: number; nom: string; prenom: string;
+  email: string; role: string; telephone: string; adresse: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
+  private readonly BASE = environment.authUrl;
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private storage: StorageService) {}
-
-  // ──────────────────────────────────────────────────────────────
-  // GETTERS
-  // ──────────────────────────────────────────────────────────────
+  constructor(private http: HttpClient) {
+    this._restoreSession();
+  }
 
   get currentUser(): User | null { return this.currentUserSubject.value; }
-
-  isLoggedIn(): boolean { return !!this.currentUserSubject.value; }
-
+  isLoggedIn(): boolean          { return !!this.currentUserSubject.value; }
   hasRole(roles: Role[]): boolean {
-    const user = this.currentUser;
-    return !!user && roles.includes(user.role);
+    const u = this.currentUser;
+    return !!u && roles.includes(u.role);
   }
 
-  // ──────────────────────────────────────────────────────────────
-  // CONNEXION / INSCRIPTION / DÉCONNEXION
-  // ──────────────────────────────────────────────────────────────
-
-  /** Connexion avec email et mot de passe */
   login(email: string, password: string): Observable<User> {
-    const users = this.storage.getAll<User>(STORAGE_KEYS.USERS);
-    const user = users.find(
-      u => u.email.toLowerCase() === email.toLowerCase() && u.password === password
+    return this.http.post<AuthResponse>(`${this.BASE}/login`, { email, password }).pipe(
+        tap(r  => this._save(r)),
+        map(r  => this._toUser(r)),
+        catchError(this._err)
     );
-    if (!user) {
-      return throwError(() => new Error('Email ou mot de passe incorrect')).pipe(delay(400));
-    }
-    const safeUser = this._stripPassword(user);
-    return of(safeUser).pipe(delay(400), tap(u => this.currentUserSubject.next(u)));
   }
 
-  /** Connexion rapide avec les comptes de démonstration */
-  quickLogin(role: 'client' | 'restaurateur' | 'livreur'): Observable<User> {
-    const emailMap: Record<string, string> = {
-      client: 'client@test.com',
-      restaurateur: 'resto@test.com',
-      livreur: 'livreur@test.com'
-    };
-    const users = this.storage.getAll<User>(STORAGE_KEYS.USERS);
-    const user = users.find(u => u.email === emailMap[role]);
-    if (!user) return throwError(() => new Error('Compte de test introuvable'));
-    const safeUser = this._stripPassword(user);
-    return of(safeUser).pipe(delay(300), tap(u => this.currentUserSubject.next(u)));
+  register(data: { nom: string; prenom: string; email: string; password: string;
+    telephone: string; adresse: string; role: Role }): Observable<User> {
+    return this.http.post<AuthResponse>(`${this.BASE}/register`, data).pipe(
+        tap(r  => this._save(r)),
+        map(r  => this._toUser(r)),
+        catchError(this._err)
+    );
   }
 
-  /** Inscription d'un nouvel utilisateur */
-  register(data: {
-    nom: string; prenom: string; email: string;
-    password: string; telephone: string; adresse: string; role: Role;
-  }): Observable<User> {
-    const users = this.storage.getAll<User>(STORAGE_KEYS.USERS);
-    if (users.some(u => u.email.toLowerCase() === data.email.toLowerCase())) {
-      return throwError(() => new Error('Cet email est déjà utilisé'));
-    }
-    const newUser = this.storage.create<User>(STORAGE_KEYS.USERS, { ...data });
-    const safeUser = this._stripPassword(newUser);
-    return of(safeUser).pipe(delay(500), tap(u => this.currentUserSubject.next(u)));
-  }
-
-  /** Déconnexion */
   logout(): void {
+    localStorage.removeItem(JWT_KEY);
+    localStorage.removeItem('webresto_user');
     this.currentUserSubject.next(null);
   }
 
-  /** Met à jour la session après modification du profil */
   updateCurrentUser(user: User): void {
-    this.currentUserSubject.next(this._stripPassword(user));
+    localStorage.setItem('webresto_user', JSON.stringify(user));
+    this.currentUserSubject.next(user);
   }
 
-  // ──────────────────────────────────────────────────────────────
-  // RECOUVREMENT DE MOT DE PASSE (Jalon I — simulé en mémoire)
-  // ──────────────────────────────────────────────────────────────
-
-  /**
-   * Étape 1 — Vérifie que l'email existe et génère un code à 6 chiffres.
-   *
-   * Jalon I  : le code est retourné directement pour l'afficher à l'écran.
-   * Jalon II : POST /auth/mot-de-passe/demande { email }
-   *            → le code sera envoyé par email, jamais retourné ici.
-   */
-  demanderReinitialisationMdp(email: string): Observable<string> {
-    const users = this.storage.getAll<User>(STORAGE_KEYS.USERS);
-    const existe = users.some(u => u.email.toLowerCase() === email.toLowerCase());
-
-    if (!existe) {
-      return throwError(() => new Error('Aucun compte trouvé avec cet email')).pipe(delay(400));
-    }
-
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    return of(code).pipe(delay(600));
+  /** Étape 1 reset : envoie un email avec un lien de reset */
+  demanderReinitialisationMdp(email: string): Observable<void> {
+    return this.http.post<void>(`${this.BASE}/forgot-password`, { email }).pipe(catchError(this._err));
   }
 
-  /**
-   * Étape 2 — Réinitialise le mot de passe en mémoire.
-   *
-   * Jalon I  : le code n'est pas re-vérifié ici (déjà vérifié dans le composant).
-   * Jalon II : POST /auth/mot-de-passe/reinitialiser { email, code, nouveauMotDePasse }
-   */
-  reinitialiserMdp(email: string, nouveauMotDePasse: string): Observable<void> {
-    const users = this.storage.getAll<User>(STORAGE_KEYS.USERS);
-    const index = users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
-
-    if (index === -1) {
-      return throwError(() => new Error('Utilisateur introuvable')).pipe(delay(400));
-    }
-
-    users[index] = { ...users[index], password: nouveauMotDePasse };
-    this.storage.saveAll(STORAGE_KEYS.USERS, users);
-
-    return of(void 0).pipe(delay(500));
+  /** Étape 2 reset : nouveau mot de passe + token reçu par email */
+  reinitialiserMdp(token: string, newPassword: string): Observable<void> {
+    return this.http.post<void>(`${this.BASE}/reset-password`, { token, newPassword }).pipe(catchError(this._err));
   }
 
-  // ──────────────────────────────────────────────────────────────
-  // MÉTHODE PRIVÉE
-  // ──────────────────────────────────────────────────────────────
+  updateProfile(data: { nom?: string; prenom?: string; telephone?: string; adresse?: string }): Observable<User> {
+    return this.http.put<AuthResponse>(`${this.BASE}/profile`, data).pipe(
+        tap(r  => this._save(r)),
+        map(r  => this._toUser(r)),
+        catchError(this._err)
+    );
+  }
 
-  /** Supprime le mot de passe avant d'exposer l'objet User */
-  private _stripPassword(user: User): User {
-    const safe = { ...user };
-    delete safe.password;
-    return safe;
+  private _save(res: AuthResponse): void {
+    if (res.token) localStorage.setItem(JWT_KEY, res.token);
+    const u = this._toUser(res);
+    localStorage.setItem('webresto_user', JSON.stringify(u));
+    this.currentUserSubject.next(u);
+  }
+
+  private _toUser(res: AuthResponse): User {
+    return { id: res.id, nom: res.nom, prenom: res.prenom, email: res.email,
+      role: res.role as Role, adresse: res.adresse, telephone: res.telephone };
+  }
+
+  private _restoreSession(): void {
+    try {
+      const u = localStorage.getItem('webresto_user');
+      const t = localStorage.getItem(JWT_KEY);
+      if (u && t) this.currentUserSubject.next(JSON.parse(u));
+    } catch { this.logout(); }
+  }
+
+  private _err(err: HttpErrorResponse): Observable<never> {
+    let msg = 'Une erreur est survenue';
+    if (err.status === 0)       msg = 'Impossible de contacter le serveur. Le backend est-il démarré ?';
+    else if (err.error?.error)  msg = err.error.error;
+    else if (err.error?.message) msg = err.error.message;
+    return throwError(() => new Error(msg));
   }
 }

@@ -11,9 +11,9 @@
 /**
  * Rôles utilisateur.
  * Chaque rôle donne accès à des fonctionnalités différentes :
- * - CLIENT       → Parcourir, commander, suivre ses commandes
- * - RESTAURATEUR → Gérer ses restaurants, plats et commandes reçues
- * - LIVREUR      → Voir les commandes disponibles, livrer
+ * - CLIENT       -> Parcourir, commander, suivre ses commandes
+ * - RESTAURATEUR -> Gérer ses restaurants, plats et commandes reçues
+ * - LIVREUR      -> Voir les commandes disponibles, livrer
  */
 export enum Role {
   CLIENT       = 'CLIENT',
@@ -23,8 +23,8 @@ export enum Role {
 
 /**
  * Cycle de vie d'une commande :
- * EN_ATTENTE → EN_PREPARATION → EN_LIVRAISON → LIVREE
- *           ↘ ANNULEE (par client ou restaurateur)
+ * EN_ATTENTE -> EN_PREPARATION -> EN_LIVRAISON -> LIVREE
+ *           -> ANNULEE (par client ou restaurateur)
  */
 export enum StatutCommande {
   EN_ATTENTE    = 'EN_ATTENTE',

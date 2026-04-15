@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="005-insert-initial-data" author="webresto">
+
+        <!-- Catégories -->
+        <insert tableName="categories"><column name="id" value="1"/><column name="nom" value="Pizzeria"/><column name="icon" value="🍕"/></insert>
+        <insert tableName="categories"><column name="id" value="2"/><column name="nom" value="Sushi"/><column name="icon" value="🍣"/></insert>
+        <insert tableName="categories"><column name="id" value="3"/><column name="nom" value="Burger"/><column name="icon" value="🍔"/></insert>
+        <insert tableName="categories"><column name="id" value="4"/><column name="nom" value="Poutine"/><column name="icon" value="🍟"/></insert>
+        <insert tableName="categories"><column name="id" value="5"/><column name="nom" value="Africain"/><column name="icon" value="🥗"/></insert>
+        <insert tableName="categories"><column name="id" value="6"/><column name="nom" value="Mexicain"/><column name="icon" value="🌶️"/></insert>
+        <insert tableName="categories"><column name="id" value="7"/><column name="nom" value="Arabe"/><column name="icon" value="🧆"/></insert>
+
+        <!-- Restaurants -->
+        <insert tableName="restaurants">
+            <column name="id" value="1"/><column name="nom" value="Pizza Trois-Rivieres"/>
+            <column name="description" value="Les meilleures pizzas artisanales de Montréal, cuites au four à bois"/>
+            <column name="adresse" value="100 Rue Sainte-Catherine"/><column name="ville" value="Trois-Rivieres"/>
+            <column name="telephone" value="514-555-1000"/><column name="categorie_id" value="1"/>
+            <column name="image_url" value="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&amp;h=400&amp;fit=crop"/>
+            <column name="proprietaire_id" value="1"/>
+        </insert>
+        <insert tableName="restaurants">
+            <column name="id" value="2"/><column name="nom" value="Mishuri guya"/>
+            <column name="description" value="Sushi frais et authentique, préparé devant vous par nos chefs"/>
+            <column name="adresse" value="200 Boulevard Saint-Laurent"/><column name="ville" value="Montréal"/>
+            <column name="telephone" value="514-555-2000"/><column name="categorie_id" value="2"/>
+            <column name="image_url" value="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&amp;h=400&amp;fit=crop"/>
+            <column name="proprietaire_id" value="1"/>
+        </insert>
+        <insert tableName="restaurants">
+            <column name="id" value="3"/><column name="nom" value="La maison du burger"/>
+            <column name="description" value="Burgers gourmets faits maison avec du boeuf Angus du Québec"/>
+            <column name="adresse" value="300 Rue Mont-Royal E"/><column name="ville" value="Montréal"/>
+            <column name="telephone" value="514-555-3000"/><column name="categorie_id" value="3"/>
+            <column name="image_url" value="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&amp;h=400&amp;fit=crop"/>
+            <column name="proprietaire_id" value="2"/>
+        </insert>
+        <insert tableName="restaurants">
+            <column name="id" value="4"/><column name="nom" value="Poutina S"/>
+            <column name="description" value="La vraie poutine québécoise depuis 1995"/>
+            <column name="adresse" value="300 Rue Mont-Royal E"/><column name="ville" value="Trois-Rivieres"/>
+            <column name="telephone" value="514-555-3000"/><column name="categorie_id" value="4"/>
+            <column name="image_url" value="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&amp;h=400&amp;fit=crop"/>
+            <column name="proprietaire_id" value="2"/>
+        </insert>
+        <insert tableName="restaurants">
+            <column name="id" value="5"/><column name="nom" value="Le Kontinang delice"/>
+            <column name="description" value="Venez faire le tour et découvrir les meilleurs plats Camerounais."/>
+            <column name="adresse" value="3039 Rue de Courval"/><column name="ville" value="Trois-Rivieres"/>
+            <column name="telephone" value="514-555-3880"/><column name="categorie_id" value="5"/>
+            <column name="image_url" value="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&amp;h=400&amp;fit=crop"/>
+            <column name="proprietaire_id" value="1"/>
+        </insert>
+
+        <!-- Plats — valueNumeric="1" au lieu de value="true" pour MySQL -->
+        <insert tableName="plats"><column name="id" value="1"/><column name="nom" value="Margherita"/><column name="description" value="Tomate, mozzarella, basilic frais"/><column name="prix" value="14.99"/><column name="restaurant_id" value="1"/><column name="disponible" valueNumeric="1"/><column name="image_url" value="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&amp;h=300&amp;fit=crop"/></insert>
+        <insert tableName="plats"><column name="id" value="2"/><column name="nom" value="Pepperoni"/><column name="description" value="Sauce tomate, fromage, pepperoni"/><column name="prix" value="16.99"/><column name="restaurant_id" value="1"/><column name="disponible" valueNumeric="1"/><column name="image_url" value="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&amp;h=300&amp;fit=crop"/></insert>
+        <insert tableName="plats"><column name="id" value="3"/><column name="nom" value="California Roll (8 pcs)"/><column name="description" value="Crabe, avocat, concombre"/><column name="prix" value="12.99"/><column name="restaurant_id" value="2"/><column name="disponible" valueNumeric="1"/><column name="image_url" value="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=400&amp;h=300&amp;fit=crop"/></insert>
+        <insert tableName="plats"><column name="id" value="4"/><column name="nom" value="Sashimi Saumon"/><column name="description" value="6 tranches de saumon frais"/><column name="prix" value="15.99"/><column name="restaurant_id" value="2"/><column name="disponible" valueNumeric="1"/><column name="image_url" value="https://images.unsplash.com/photo-1534482421-64566f976cfa?w=400&amp;h=300&amp;fit=crop"/></insert>
+        <insert tableName="plats"><column name="id" value="5"/><column name="nom" value="Classic Burger"/><column name="description" value="Boeuf Angus, cheddar, salade, tomate"/><column name="prix" value="13.99"/><column name="restaurant_id" value="3"/><column name="disponible" valueNumeric="1"/><column name="image_url" value="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&amp;h=300&amp;fit=crop"/></insert>
+        <insert tableName="plats"><column name="id" value="6"/><column name="nom" value="Poutine Classique"/><column name="description" value="Frites, fromage en grains, sauce brune"/><column name="prix" value="11.99"/><column name="restaurant_id" value="4"/><column name="disponible" valueNumeric="1"/><column name="image_url" value="https://images.unsplash.com/photo-1585325701165-e1362e0a36f3?w=400&amp;h=300&amp;fit=crop"/></insert>
+        <insert tableName="plats"><column name="id" value="7"/><column name="nom" value="Ndolé"/><column name="description" value="Plat traditionnel camerounais aux feuilles de ndolé et crevettes"/><column name="prix" value="18.99"/><column name="restaurant_id" value="5"/><column name="disponible" valueNumeric="1"/><column name="image_url" value="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&amp;h=300&amp;fit=crop"/></insert>
+
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="003-create-plats" author="webresto">
+        <createTable tableName="plats">
+            <column name="id"            type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="nom"           type="VARCHAR(200)"><constraints nullable="false"/></column>
+            <column name="description"   type="TEXT"/>
+            <column name="prix"          type="DECIMAL(10,2)"><constraints nullable="false"/></column>
+            <column name="image_url"     type="VARCHAR(1000)"/>
+            <column name="restaurant_id" type="BIGINT"><constraints nullable="false" foreignKeyName="fk_plat_resto" references="restaurants(id)"/></column>
+            <column name="disponible"    type="TINYINT(1)" defaultValueNumeric="1"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
