@@ -39,7 +39,7 @@ type Etape = 'formulaire' | 'succes' | 'erreur';
         MatButtonModule, MatIconModule
     ],
     templateUrl: `./reset-password.page.html`,
-    styleUrls: ['.reset-password.page.scss']
+    styleUrls: ['./reset-password.page.scss']
 })
 export class ResetPasswordPage implements OnInit {
 

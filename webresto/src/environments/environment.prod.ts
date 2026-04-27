@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  authUrl: 'https://votre-auth-service.herokuapp.com/api/auth',
-  apiUrl:  'https://votre-business-service.herokuapp.com/api',
+  authUrl: 'https://webresto-auth-service.onrender.com/api/auth',
+  apiUrl: 'https://webresto-business-service.onrender.com/api'
 };

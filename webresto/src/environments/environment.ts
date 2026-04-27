@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  authUrl: 'http://localhost:8081/api/auth',
-  apiUrl:  'http://localhost:8082/api',
+  authUrl: 'https://webresto-auth-service.onrender.com/api/auth',
+  apiUrl: 'https://webresto-business-service.onrender.com/api'
 };
