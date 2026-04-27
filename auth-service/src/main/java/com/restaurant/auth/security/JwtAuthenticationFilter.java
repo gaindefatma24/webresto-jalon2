@@ -20,7 +20,7 @@ import java.io.IOException;
  * Intercepte CHAQUE requête HTTP et vérifie si elle contient un JWT valide.
  *
  * Flux :
- *   1. Lire le header  →  Authorization: Bearer <token>
+ *   1. Lire le header  ->  Authorization: Bearer <token>
  *   2. Extraire l'email depuis le token
  *   3. Charger l'utilisateur depuis la BD
  *   4. Vérifier la signature + expiration du token
@@ -47,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader("Authorization");
 
-        // Pas de header Bearer → laisser passer (Spring Security refusera si la route est protégée)
+        // Pas de header Bearer -> laisser passer (Spring Security refusera si la route est protégée)
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;

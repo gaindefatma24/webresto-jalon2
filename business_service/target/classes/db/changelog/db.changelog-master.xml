@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <include file="classpath:db/changelog/001-create-categories.xml"/>
+    <include file="classpath:db/changelog/002-create-restaurants.xml"/>
+    <include file="classpath:db/changelog/003-create-plats.xml"/>
+    <include file="classpath:db/changelog/004-create-commandes.xml"/>
+    <include file="classpath:db/changelog/005-insert-data.xml"/>
+
+</databaseChangeLog>
