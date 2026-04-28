@@ -19,7 +19,7 @@ public class Plat {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal prix;
 
-    @Column(name = "image_url")
+    @Column(name = "image_url", columnDefinition = "TEXT")
     private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)

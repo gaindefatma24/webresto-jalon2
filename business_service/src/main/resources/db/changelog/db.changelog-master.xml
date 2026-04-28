@@ -9,5 +9,6 @@
     <include file="classpath:db/changelog/003-create-plats.xml"/>
     <include file="classpath:db/changelog/004-create-commandes.xml"/>
     <include file="classpath:db/changelog/005-insert-data.xml"/>
+    <include file="db/changelog/006-change-image-url-to-text.xml"/>
 
 </databaseChangeLog>
