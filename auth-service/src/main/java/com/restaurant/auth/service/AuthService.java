@@ -188,7 +188,7 @@ public class AuthService {
         message.setText(
             "Bonjour,\n\n" +
             "Vous avez demandé la réinitialisation de votre mot de passe.\n\n" +
-            "Cliquez sur le lien suivant (valide 1 heure) :\n" +
+            "Cliquez sur le lien suivant (valide 15 minutes) :\n" +
             "http://localhost:4200/reset-password?token=" + token + "\n\n" +
             "Si vous n'avez pas fait cette demande, ignorez cet email.\n\n" +
             "L'équipe WebResto"
